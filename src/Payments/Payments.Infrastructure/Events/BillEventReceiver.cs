@@ -1,0 +1,37 @@
+﻿namespace Payments.Infrastructure.Events
+{
+    using Common.Application.CQRS;
+    using Common.Infrastructure;
+    using Microsoft.Extensions.DependencyInjection;
+    using Payments.Application.Events;
+    using Payments.Application.Implementations.Bill.Update;
+    using Payments.Domain.Enums;
+    using RabbitMQ.Client;
+    using System;
+    using System.Threading.Tasks;
+
+    public class BillEventReceiver : EventReceiver<CreateBillEventBody>
+    {
+        private readonly IServiceScopeFactory _scopeFactory;
+        protected override string ExchangeName => "bill-created-exchange";
+        protected override string QueueName => "bill-created-queue";
+        protected override Func<CreateBillEventBody, Task> ProcessEvent => ProcessBillCreated;
+
+        public BillEventReceiver(ConnectionFactory factory, IServiceScopeFactory scopeFactory) : base(factory)
+        {
+            _scopeFactory = scopeFactory;
+        }
+
+        private async Task ProcessBillCreated(CreateBillEventBody body)
+        {
+            var command = new UpdateBillCommand(body.Id, BillStatus.Completed);
+
+            using var scope = _scopeFactory.CreateScope();
+
+            var commandDispatcher = scope.ServiceProvider.GetRequiredService<ICommandDispatcher>();
+
+            await commandDispatcher.DispatchAsync<UpdateBillCommand, Guid>(command, default);
+
+        }
+    }
+}

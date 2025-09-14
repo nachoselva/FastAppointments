@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.Docker.Sdk">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>331ea490-9aa5-463e-b196-43f8fb050479</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DockerComposeProjectVersion>2.1.0</DockerComposeProjectVersion>
+    <DockerTargetOS>Linux</DockerTargetOS>
+    <ProjectVersion>2.1</ProjectVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include=".env" />
+    <None Include="docker-compose.yml" />
+    <None Include="migrations\init_db.sql" />
+  </ItemGroup>
+</Project>

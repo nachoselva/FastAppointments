@@ -1,0 +1,6 @@
+@Payments.Api_HostAddress = https://localhost:7059
+
+POST {{Payments.Api_HostAddress}}/bill/
+Accept: application/json
+
+###
