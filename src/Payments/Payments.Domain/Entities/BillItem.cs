@@ -19,6 +19,7 @@
             UnitsCount = unitsCount;
             UnitsName = unitsName;
         }
+
         protected BillItem()
         {
 
