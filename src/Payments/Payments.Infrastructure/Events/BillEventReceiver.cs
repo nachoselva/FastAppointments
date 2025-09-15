@@ -1,7 +1,7 @@
 ﻿namespace Payments.Infrastructure.Events
 {
     using Common.Application.CQRS;
-    using Common.Infrastructure;
+    using Common.Infrastructure.Events;
     using Microsoft.Extensions.DependencyInjection;
     using Payments.Application.Events;
     using Payments.Application.Implementations.Bill.Update;

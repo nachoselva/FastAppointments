@@ -1,4 +1,4 @@
-﻿namespace Common.Infrastructure
+﻿namespace Common.Infrastructure.Events
 {
     using Microsoft.Extensions.Hosting;
     using RabbitMQ.Client;

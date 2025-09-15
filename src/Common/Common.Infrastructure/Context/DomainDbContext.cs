@@ -1,6 +1,7 @@
-﻿namespace Common.Infrastructure
+﻿namespace Common.Infrastructure.Context
 {
     using Common.Domain;
+    using Common.Infrastructure.Configuration;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System;

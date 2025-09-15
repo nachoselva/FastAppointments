@@ -1,6 +1,8 @@
 ﻿namespace Common.Infrastructure
 {
     using Common.Application.Repositories;
+    using Common.Infrastructure.Context;
+    using Common.Infrastructure.Events;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;

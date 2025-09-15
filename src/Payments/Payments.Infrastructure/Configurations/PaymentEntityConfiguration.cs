@@ -1,6 +1,6 @@
 ﻿namespace Payments.Infrastructure.Configurations
 {
-    using Common.Infrastructure;
+    using Common.Infrastructure.Configuration;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using Payments.Domain.Entities;
@@ -15,18 +15,18 @@
 
             builder.ToTable("PaymentEntities", table => table.HasCheckConstraint(
                 "CK_PaymentEntity_ExternalId",
-                $"{DomainEntityColumnNames.DELETED} = 0 OR (({clientIdColumnName} IS NOT NULL OR {providerIdColumnName} IS NOT NULL OR {companyIdColumnName} IS NOT NULL))"));
+                $"{ConfigurationExtensions.DeletedFilter()} OR (({clientIdColumnName} IS NOT NULL OR {providerIdColumnName} IS NOT NULL OR {companyIdColumnName} IS NOT NULL))"));
 
             builder.HasIndex(e => new { e.ClientId, e.ProviderId, e.CompanyId })
-                .HasFilter($"{DomainEntityColumnNames.DELETED} = 0");
+                .HasDeletedFilter();
             builder.HasIndex(e => e.ClientId)
-                .HasFilter($"{DomainEntityColumnNames.DELETED} = 0")
+                .HasDeletedFilter()
                 .IsUnique();
             builder.HasIndex(e => e.ProviderId)
-                .HasFilter($"{DomainEntityColumnNames.DELETED} = 0")
+                .HasDeletedFilter()
                 .IsUnique();
             builder.HasIndex(e => e.CompanyId)
-                .HasFilter($"{DomainEntityColumnNames.DELETED} = 0")
+                .HasDeletedFilter()
                 .IsUnique();
         }
     }

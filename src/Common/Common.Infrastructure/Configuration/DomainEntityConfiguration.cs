@@ -1,4 +1,4 @@
-﻿namespace Common.Infrastructure
+﻿namespace Common.Infrastructure.Configuration
 {
     using Common.Domain;
     using Microsoft.EntityFrameworkCore;

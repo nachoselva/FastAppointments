@@ -1,6 +1,6 @@
-﻿namespace Common.Infrastructure
+﻿namespace Common.Infrastructure.Configuration
 {
-    public static class DomainEntityColumnNames
+    internal static class DomainEntityColumnNames
     {
         public const string PERIOD_START = "VersionStartFrom";
         public const string PERIOD_END = "VersionEndFrom";

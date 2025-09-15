@@ -1,6 +1,6 @@
 ﻿namespace Payments.Infrastructure.Configurations
 {
-    using Common.Infrastructure;
+    using Common.Infrastructure.Configuration;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using Payments.Domain.Entities;
@@ -17,7 +17,7 @@
                 .HasForeignKey(b => b.BillItemId);
 
             builder.HasIndex(e => new { e.BillItemId, e.SourceType, e.SourceId })
-                .HasFilter($"{DomainEntityColumnNames.DELETED} = 0")
+                .HasDeletedFilter()
                 .IsUnique();
         }
     }

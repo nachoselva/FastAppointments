@@ -1,4 +1,4 @@
-﻿namespace Common.Infrastructure
+﻿namespace Common.Infrastructure.Context
 {
     using Common.Application.Repositories;
     using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-﻿namespace Common.Infrastructure
+﻿namespace Common.Infrastructure.Events
 {
     using Payments.Application.Abstractions;
     using RabbitMQ.Client;
