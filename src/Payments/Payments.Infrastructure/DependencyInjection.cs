@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Payments.Application.Abstractions;
 using Payments.Application.Events;
-using Payments.Infrastructure.DbContext;
+using Payments.Infrastructure.Context;
 using Payments.Infrastructure.Events;
 using Payments.Infrastructure.Repositories;
 

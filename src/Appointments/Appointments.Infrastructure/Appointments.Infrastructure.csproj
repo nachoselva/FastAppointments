@@ -1,7 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.Infrastructure\Common.Infrastructure.csproj" />
     <ProjectReference Include="..\Appointments.Application\Appointments.Application.csproj" />
+    <ProjectReference Include="..\Appointments.Domain\Appointments.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Events\" />
   </ItemGroup>
 
   <PropertyGroup>

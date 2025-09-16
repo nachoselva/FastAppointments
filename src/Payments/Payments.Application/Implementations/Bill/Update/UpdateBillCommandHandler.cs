@@ -23,7 +23,7 @@
 
         public async Task<Result<Guid>> HandleAsync(UpdateBillCommand command, CancellationToken cancellationToken)
         {
-            Bill? bill = await _billRepository.GetById(command.Id);
+            Bill? bill = await _billRepository.GetByIdAsync(command.Id);
 
             if (bill == null)
                 return Result.Fail("Bill does not exists");

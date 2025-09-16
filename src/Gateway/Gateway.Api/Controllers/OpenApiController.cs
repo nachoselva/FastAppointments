@@ -1,3 +1,4 @@
+using Gateway.Config;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.OpenApi.Extensions;
@@ -58,7 +59,7 @@ public partial class OpenApiController : ControllerBase
 
         foreach (var item in apiConfigs)
         {
-            string paymentsJson = await httpClient.GetStringAsync($"{item.Url}:{item.Port}/openapi/v1.json");
+            string paymentsJson = await httpClient.GetStringAsync($"http://{item.Url}:{item.Port}/openapi/v1.json");
             var reader = new OpenApiStringReader();
             var doc = reader.Read(paymentsJson, out _);
 

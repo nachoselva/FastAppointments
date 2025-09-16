@@ -1,18 +1,17 @@
 ﻿namespace Gateway.Api
 {
-    using Gateway.Api.Config;
+    using Gateway.Config;
     using Ocelot.Configuration.File;
-    using Ocelot.Configuration.Repository;
-    using static Gateway.Api.Controllers.OpenApiController;
+    using Ocelot.DependencyInjection;
 
     internal static class DependencyInjection
     {
         public static void ConfigureOcelot(this WebApplicationBuilder builder)
         {
-            builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
-
             var fileConfig = builder.Configuration.Get<FileConfiguration>() ?? new FileConfiguration();
-            fileConfig.Routes ??= [];
+
+            fileConfig.GlobalConfiguration ??= new FileGlobalConfiguration();
+            fileConfig.GlobalConfiguration.BaseUrl = "http://localhost:5000";
 
             var apiConfigs = builder.Configuration.GetRequiredSection("Apis").Get<ApiConfig[]>() ?? [];
 
@@ -20,22 +19,21 @@
             {
                 fileConfig.Routes.Add(new FileRoute
                 {
-                    UpstreamPathTemplate = $"/{item.Path}/{{everything}}",
-                    UpstreamHttpMethod = ["Get", "Post", "Put", "Delete"],
-                    DownstreamPathTemplate = "/{everything}",
+                    RouteIsCaseSensitive = false,
+                    UpstreamPathTemplate = $"/{item.Path}/{{catchAll}}",
+                    UpstreamHttpMethod = ["GET", "POST", "PUT", "DELETE"],
+                    DownstreamPathTemplate = "/{catchAll}",
                     DownstreamScheme = "http",
                     DownstreamHostAndPorts =
                     [
-                        new() {
-                            Host = item.Url,
-                            Port = item.Port
-                        }
+                        new() { Host = item.Url, Port = item.Port }
                     ]
                 });
             }
 
-            builder.Services.AddSingleton<IFileConfigurationRepository>(
-                new InMemoryFileConfigurationRepository(fileConfig));
+            builder.Configuration.AddOcelot(fileConfig);
+
+            builder.Services.AddOcelot();
         }
     }
 }

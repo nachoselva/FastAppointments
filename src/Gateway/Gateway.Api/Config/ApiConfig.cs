@@ -1,12 +1,9 @@
-namespace Gateway.Api.Controllers;
+namespace Gateway.Config;
 
-public partial class OpenApiController
+public class ApiConfig
 {
-    public class ApiConfig
-    {
-        public required string Url { get; set; }
-        public required int Port { get; set; }
-        public required string ApiKey { get; set; }
-        public required string Path { get; set; }
-    }
+    public required string Url { get; set; }
+    public required int Port { get; set; }
+    public required string ApiKey { get; set; }
+    public required string Path { get; set; }
 }

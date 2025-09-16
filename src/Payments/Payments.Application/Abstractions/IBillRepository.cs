@@ -5,7 +5,7 @@
 
     public interface IBillRepository
     {
-        Task AddBill(Bill bill);
-        Task<Bill?> GetById(Guid id);
+        Task AddAsync(Bill bill);
+        Task<Bill?> GetByIdAsync(Guid id);
     }
 }

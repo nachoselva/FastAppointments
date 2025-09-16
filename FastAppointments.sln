@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11010.61 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Appointments", "Appointments", "{47B7591B-B5BE-4296-A0AD-78E9129BC2B4}"
 EndProject
@@ -315,5 +315,8 @@ Global
 		{B1AC8F17-74D5-4B2A-9B12-BEC9964C88F1} = {1E2C5C51-1E00-46F1-918B-720FC02A5750}
 		{C6737CE0-8F18-48B8-8FBF-F22079F29919} = {F2892F7D-49D2-0969-2635-C4CE9CCFB03E}
 		{82F2A294-00CB-475B-8572-42127FF7CD39} = {1E2C5C51-1E00-46F1-918B-720FC02A5750}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AD1CC329-2CD5-4D89-8E87-A26BF0D238F6}
 	EndGlobalSection
 EndGlobal

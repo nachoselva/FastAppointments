@@ -61,7 +61,7 @@
             if (bill.Receiver.PaymentEntity.Id == default)
                 await _paymentEntityRepository.AddAsync(bill.Receiver.PaymentEntity);
 
-            await _billRepository.AddBill(bill);
+            await _billRepository.AddAsync(bill);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

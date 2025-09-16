@@ -3,7 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using Payments.Application.Abstractions;
     using Payments.Domain.Entities;
-    using Payments.Infrastructure.DbContext;
+    using Payments.Infrastructure.Context;
     using System;
     using System.Threading.Tasks;
 

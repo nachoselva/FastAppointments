@@ -1,4 +1,4 @@
-﻿namespace Payments.Infrastructure.DbContext
+﻿namespace Payments.Infrastructure.Context
 {
     using Common.Infrastructure.Context;
     using Microsoft.EntityFrameworkCore;

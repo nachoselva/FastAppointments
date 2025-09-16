@@ -6,7 +6,6 @@
     using Payments.Domain.Commands;
     using Payments.Domain.Enums;
     using System.Collections.Generic;
-    using System.ComponentModel.Design;
 
     public class Bill : DomainEntity
     {

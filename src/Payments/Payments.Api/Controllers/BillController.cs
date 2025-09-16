@@ -17,8 +17,6 @@ public class BillController : ControllerBase
         _commandDispatcher = commandDispatcher;
     }
 
-    // Request -> Command
-
     [HttpPost]
     public async Task<Result<Guid>> CreateBill([FromBody] CreateBillRequest request, CancellationToken cancellationToken)
     {
@@ -39,11 +37,4 @@ public class BillController : ControllerBase
 
         return await _commandDispatcher.DispatchAsync<CreateBillCommand, Guid>(command, cancellationToken);
     }
-
-    [HttpPost]
-    [Route("test")]
-    public string Test()
-    {
-        return "Payments.Api is working!";
-    }   
 }
