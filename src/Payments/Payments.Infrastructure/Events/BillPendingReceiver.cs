@@ -1,8 +1,8 @@
 ﻿namespace Payments.Infrastructure.Events
 {
     using Common.Application.CQRS;
-    using Common.Infrastructure.Clients;
     using Common.Infrastructure.Events;
+    using Common.Infrastructure.HttpClients;
     using Common.Models.Appointments;
     using Common.Models.Enums;
     using Common.Models.Payments;

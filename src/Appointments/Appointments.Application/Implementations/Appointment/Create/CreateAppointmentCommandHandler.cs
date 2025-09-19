@@ -3,11 +3,11 @@
     using Appointments.Application.Abstractions;
     using Appointments.Domain.Commands;
     using Appointments.Domain.Entities;
+    using Common.Application;
     using Common.Application.CQRS;
     using Common.Application.Repositories;
     using Common.Models.Payments;
     using FluentResults;
-    using Payments.Application.Abstractions;
     using System.Threading;
     using System.Threading.Tasks;
 

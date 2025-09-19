@@ -36,7 +36,7 @@
 
             return new BillItem(command.Description, command.PricePerUnit, command.UnitsCount, command.UnitsName)
             {
-                BillItemSources = command.BillItemSources.Select(BillItemSource.Create).ToList()
+                BillItemSources = [.. command.BillItemSources.Select(BillItemSource.Create)]
             };
         }
     }

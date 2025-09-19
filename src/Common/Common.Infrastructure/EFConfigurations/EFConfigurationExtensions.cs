@@ -1,6 +1,5 @@
 ﻿namespace Common.Infrastructure.EFConfigurations
 {
-    using Common.Infrastructure.Configuration;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

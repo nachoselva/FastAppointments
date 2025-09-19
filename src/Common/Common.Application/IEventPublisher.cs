@@ -1,4 +1,4 @@
-﻿namespace Payments.Application.Abstractions
+﻿namespace Common.Application
 {
     using System.Threading.Tasks;
 

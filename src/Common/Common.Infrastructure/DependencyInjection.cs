@@ -1,23 +1,22 @@
 ﻿namespace Common.Infrastructure
 {
+    using Common.Application;
     using Common.Application.Repositories;
-    using Common.Infrastructure.Clients;
     using Common.Infrastructure.Configuration;
     using Common.Infrastructure.Context;
     using Common.Infrastructure.Events;
+    using Common.Infrastructure.HttpClients;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Payments.Application.Abstractions;
     using RabbitMQ.Client;
-    using System.Net.NetworkInformation;
 
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDatabase<T>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddDatabase<T>(this IServiceCollection services)
             where T : DbContext
         {
-            services.AddDbContext<T>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<T>();
             services.AddScoped<IUnitOfWork, UnitOfWork<T>>();
             return services;
         }

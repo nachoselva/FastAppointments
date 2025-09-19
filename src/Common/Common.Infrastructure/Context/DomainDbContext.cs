@@ -1,21 +1,17 @@
 ﻿namespace Common.Infrastructure.Context
 {
     using Common.Domain;
-    using Common.Infrastructure.Configuration;
+    using Common.Infrastructure.EFConfigurations;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using Microsoft.EntityFrameworkCore.Infrastructure;
+    using Microsoft.Extensions.Configuration;
     using System;
     using System.Reflection;
     using System.Threading.Tasks;
 
-    public abstract class DomainDbContext : DbContext
+    public abstract class DomainDbContext(DbContextOptions options) : DbContext(options)
     {
-        protected DomainDbContext(DbContextOptions options) : base(options)
-        {
-
-        }
-
-
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (EntityEntry<DomainEntity> entry in ChangeTracker.Entries<DomainEntity>())

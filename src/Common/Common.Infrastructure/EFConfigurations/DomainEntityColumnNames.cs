@@ -1,4 +1,4 @@
-﻿namespace Common.Infrastructure.Configuration
+﻿namespace Common.Infrastructure.EFConfigurations
 {
     internal static class DomainEntityColumnNames
     {

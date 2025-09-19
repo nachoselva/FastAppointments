@@ -1,21 +1,14 @@
-﻿namespace Common.Infrastructure.Clients
+﻿namespace Common.Infrastructure.HttpClients
 {
     using Common.Models.Appointments;
     using System;
     using System.Net.Http.Json;
 
-    public class AppointmentsClient
+    public class AppointmentsClient(HttpClient httpClient)
     {
-        private readonly HttpClient _httpClient;
-
-        public AppointmentsClient(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
-
         public Task<GetEventResponse?> GetEvent(Guid sourceId)
         {
-            return _httpClient.GetFromJsonAsync<GetEventResponse>($"events/{sourceId}");
+            return httpClient.GetFromJsonAsync<GetEventResponse>($"events/{sourceId}");
         }
     }
 }

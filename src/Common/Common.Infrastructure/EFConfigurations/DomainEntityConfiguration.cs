@@ -1,4 +1,4 @@
-﻿namespace Common.Infrastructure.Configuration
+﻿namespace Common.Infrastructure.EFConfigurations
 {
     using Common.Domain;
     using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@
 
     public class DomainEntityConfiguration
     {
-        public void Configure<T>(EntityTypeBuilder builder)
+        public static void Configure<T>(EntityTypeBuilder builder)
             where T : DomainEntity
         {
             static string GetColumnName(IMutableEntityType metadata, string propertyName)

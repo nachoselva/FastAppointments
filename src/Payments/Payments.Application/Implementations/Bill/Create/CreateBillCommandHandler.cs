@@ -1,5 +1,6 @@
 ﻿namespace Payments.Application.Implementations.Bill.Create
 {
+    using Common.Application;
     using Common.Application.CQRS;
     using Common.Application.Repositories;
     using Common.Models.Payments;

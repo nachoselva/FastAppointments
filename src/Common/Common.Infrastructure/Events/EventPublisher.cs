@@ -1,6 +1,6 @@
 ﻿namespace Common.Infrastructure.Events
 {
-    using Payments.Application.Abstractions;
+    using Common.Application;
     using RabbitMQ.Client;
     using RabbitMQ.Client.Events;
     using System.Text;
@@ -48,7 +48,7 @@
         public void Dispose()
         {
             GC.SuppressFinalize(this);
-            DisposeAsync().GetAwaiter().GetResult();
+            DisposeAsync().AsTask().GetAwaiter().GetResult();
         }
 
         private async Task PublishMessageWithOpenedConnection(T eventToBePublished, CancellationToken cancellationToken)

@@ -1,12 +1,6 @@
-﻿namespace Common.Infrastructure.Clients
+﻿namespace Common.Infrastructure.HttpClients
 {
-    public class PaymentsClient
+    public class PaymentsClient(HttpClient httpClient)
     {
-        private readonly HttpClient _httpClient;
-
-        public PaymentsClient(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
     }
 }

@@ -15,7 +15,7 @@
             return Task.FromResult(Result.Merge(senderResult, receiverResult));
         }
 
-        private Result Validate(PaymentEntityCommand sender)
+        private static Result Validate(PaymentEntityCommand sender)
         {
             if (sender.ClientId == null && sender.ProviderId == null && sender.CompanyId == null)
                 return Result.Fail("External Ids can't be empty");

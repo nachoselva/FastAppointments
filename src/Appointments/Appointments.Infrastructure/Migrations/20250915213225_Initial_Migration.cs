@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
+﻿#nullable disable
 
 namespace Appointments.Infrastructure.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+    using System;
+
     /// <inheritdoc />
     public partial class Initial_Migration : Migration
     {
