@@ -5,20 +5,13 @@
     using System;
     using System.Threading.Tasks;
 
-    internal sealed class CommandDispatcher : ICommandDispatcher
+    internal sealed class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDispatcher
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public CommandDispatcher(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
         public async Task<Result<TResult>> DispatchAsync<TCommand, TResult>(TCommand command, CancellationToken cancellationToken) 
             where TCommand : ICommand<TResult>
         {
-            var handler = _serviceProvider.GetRequiredService<ICommandHandler<TCommand, TResult>>();
-            var validator = _serviceProvider.GetService<ICommandValidator<TCommand, TResult>>();
+            var handler = serviceProvider.GetRequiredService<ICommandHandler<TCommand, TResult>>();
+            var validator = serviceProvider.GetService<ICommandValidator<TCommand, TResult>>();
             if (validator != null)
             {
                 var validatorResult = await validator.ValidateAsync(command);

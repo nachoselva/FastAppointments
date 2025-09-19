@@ -11,12 +11,12 @@ namespace Payments.Tests.Payments.Api.Controllers
     public class BillControllerTests
     {
         private readonly ICommandDispatcher _commandDispatcherSub;
-        private readonly BillController _controller;
+        private readonly BillsController _controller;
 
         public BillControllerTests()
         {
             _commandDispatcherSub = Substitute.For<ICommandDispatcher>();
-            _controller = new BillController(_commandDispatcherSub);
+            _controller = new BillsController(_commandDispatcherSub);
         }
 
         [Fact]

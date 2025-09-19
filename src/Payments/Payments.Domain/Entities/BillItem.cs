@@ -7,10 +7,10 @@
 
     public class BillItem : DomainEntity
     {
-        public string Description { get; private set; }
+        public string Description { get; private set; } = string.Empty;
         public decimal PricePerUnit { get; private set; }
         public int UnitsCount { get; private set; }
-        public string UnitsName { get; private set; }
+        public string UnitsName { get; private set; } = string.Empty;
 
         private BillItem(string description, decimal pricePerUnit, int unitsCount, string unitsName)
         {

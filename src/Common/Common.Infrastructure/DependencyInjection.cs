@@ -1,6 +1,8 @@
 ﻿namespace Common.Infrastructure
 {
     using Common.Application.Repositories;
+    using Common.Infrastructure.Clients;
+    using Common.Infrastructure.Configuration;
     using Common.Infrastructure.Context;
     using Common.Infrastructure.Events;
     using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Payments.Application.Abstractions;
     using RabbitMQ.Client;
+    using System.Net.NetworkInformation;
 
     public static class DependencyInjection
     {
@@ -50,6 +53,24 @@
             services.AddSingleton<IEventPublisher<TEvent>, TImplementation>();
 
             return services;
+        }
+
+        public static IServiceCollection AddHttpClients(this IServiceCollection services, IConfiguration configuration)
+        {
+            var apis = configuration.GetApisConfigByName();
+            services.AddClient<AppointmentsClient>(apis, "appointments");
+            services.AddClient<PaymentsClient>(apis, "payments");
+            return services;
+        }
+
+        private static void AddClient<T>(this IServiceCollection services, IDictionary<string, ApiConfig> configs, string apiName)
+            where T : class
+        {
+            services.AddHttpClient<T>(client =>
+            {
+                var config = configs[apiName];
+                client.BaseAddress = new Uri($"http://{config.Host}:{config.HttpPort}");
+            });
         }
     }
 }

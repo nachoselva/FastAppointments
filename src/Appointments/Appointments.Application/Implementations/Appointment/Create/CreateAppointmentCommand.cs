@@ -1,6 +1,10 @@
-﻿namespace Payments.Application.Implementations.Bill.Create
+﻿namespace Appointments.Application.Implementations.Appointment.Create
 {
     using Common.Application.CQRS;
 
-    public sealed record CreateAppointmentCommand(bool IsRecurrent, DateTime StartOn, int? EventsCount, string Description, int DurationInMinutes) : ICommand<Guid>;
+    public sealed record CreateAppointmentCommand(
+        bool IsRecurrent,
+        DateTime StartOn,
+        int? EventsCount,
+        CreateAppointmentConfigurationCommand Configuration) : ICommand<Guid>;
 }

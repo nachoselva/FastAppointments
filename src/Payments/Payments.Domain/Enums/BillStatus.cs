@@ -2,8 +2,8 @@
 {
     public enum BillStatus
     {
-        Pending = 1,
-        Completed = 2,
+        Pending = 0,
+        Completed = 1,
         Fail = 3
     }
 }

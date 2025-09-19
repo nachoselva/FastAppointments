@@ -1,30 +1,29 @@
-using Common.Application.CQRS;
-using FluentResults;
-using Microsoft.AspNetCore.Mvc;
-using Payments.Application.Implementations.Bill.Create;
-
-namespace Appointments.Api.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class AppointmentsController : ControllerBase
+namespace Appointments.Api.Controllers
 {
-    private readonly ICommandDispatcher _commandDispatcher;
-    public AppointmentsController(ICommandDispatcher commandDispatcher)
-    {
-        _commandDispatcher = commandDispatcher;
-    }
+    using Appointments.Application.Implementations.Appointment.Create;
+    using Common.Application.CQRS;
+    using FluentResults;
+    using Microsoft.AspNetCore.Mvc;
 
-    [HttpPost]
-    public async Task<Result<Guid>> CreateAppointment([FromBody] CreateAppointmentRequest request, CancellationToken cancellationToken)
+    [ApiController]
+    [Route("[controller]")]
+    public class AppointmentsController(ICommandDispatcher commandDispatcher) : ControllerBase
     {
-        var command = new CreateAppointmentCommand(
-            request.IsRecurrent,
-            request.StartOn,
-            request.EventsCount,
-            request.Description,
-            request.DurationInMinutes);
+        [HttpPost]
+        public Task<Result<Guid>> CreateAppointment([FromBody] CreateAppointmentRequest request, CancellationToken cancellationToken)
+        {
+            var command = new CreateAppointmentCommand(
+                request.IsRecurrent,
+                request.StartOn,
+                request.EventsCount,
+                new CreateAppointmentConfigurationCommand(
+                    request.Configuration.Description,
+                    request.Configuration.DurationInMinutes,
+                    request.Configuration.Services.Select(s => new AppointmentServiceCommand(s.ExternalServiceId, s.UnitsCount)),
+                    request.Configuration.Attendes.Select(a => new AppointmentAttendeCommand(a.Category, a.Type, a.ExternalId, a.IsOptional))
+                    ));
 
-        return await _commandDispatcher.DispatchAsync<CreateAppointmentCommand, Guid>(command, cancellationToken);
+            return commandDispatcher.DispatchAsync<CreateAppointmentCommand, Guid>(command, cancellationToken);
+        }
     }
 }

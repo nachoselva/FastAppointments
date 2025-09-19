@@ -5,7 +5,7 @@
 
     public class BillItemSource : DomainEntity
     {
-        public string SourceType { get; private set; }
+        public string SourceType { get; private set; } = string.Empty;
         public Guid SourceId { get; private set; }
 
         private BillItemSource(string sourceType, Guid sourceId)

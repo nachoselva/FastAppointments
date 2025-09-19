@@ -1,18 +1,17 @@
 ﻿namespace Common.Infrastructure.Configuration
 {
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using Microsoft.Extensions.Configuration;
 
     public static class ConfigurationExtensions
     {
-
-        private const string DELETED_FILTER = $"{DomainEntityColumnNames.DELETED} = 0";
-
-        public static string DeletedFilter() => DELETED_FILTER;
-
-        public static IndexBuilder HasDeletedFilter(this IndexBuilder indexBuilder)
+        public static ApiConfig[] GetApisConfig(this IConfiguration configuration)
         {
-            return indexBuilder.HasFilter($"{DomainEntityColumnNames.DELETED} = 0");
+            return configuration.GetRequiredSection("Apis").Get<ApiConfig[]>() ?? [];
+        }
+
+        public static IDictionary<string, ApiConfig> GetApisConfigByName(this IConfiguration configuration)
+        {
+            return configuration.GetApisConfig().ToDictionary(ap => ap.Name, ap => ap);
         }
     }
 }

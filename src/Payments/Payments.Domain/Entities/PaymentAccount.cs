@@ -16,8 +16,8 @@
 
         }
 
-        public string AccountType { get; private set; }
-        public string AccountData { get; private set; }
+        public string AccountType { get; private set; } = string.Empty;
+        public string AccountData { get; private set; } = string.Empty;
 
         public Guid PaymentEntityId { get; private set; }
         public virtual PaymentEntity PaymentEntity { get; private set; } = null!;

@@ -1,39 +1,23 @@
-﻿namespace Payments.Application.Bill.Create
+﻿namespace Payments.Application.Implementations.Bill.Create
 {
     using Common.Application.CQRS;
     using Common.Application.Repositories;
+    using Common.Models.Payments;
     using FluentResults;
     using Payments.Application.Abstractions;
-    using Payments.Application.Events;
-    using Payments.Application.Implementations.Bill.Create;
     using Payments.Domain.Abstractions;
     using Payments.Domain.Commands;
     using Payments.Domain.Entities;
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class CreateBillCommandHandler : ICommandHandler<CreateBillCommand, Guid>
+    internal class CreateBillCommandHandler(
+        IBillRepository billRepository,
+        IPaymentEntityRepository paymentEntityRepository,
+        IUnitOfWork unitOfWork,
+        IEventPublisher<CreateBillEventBody> billEventPublisher,
+        IPaymentEntityService paymentEntityService) : ICommandHandler<CreateBillCommand, Guid>
     {
-        private readonly IBillRepository _billRepository;
-        private readonly IPaymentEntityRepository _paymentEntityRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IEventPublisher<CreateBillEventBody> _billEventPublisher;
-        private readonly IPaymentEntityService _paymentEntityService;
-
-        public CreateBillCommandHandler(
-            IBillRepository billRepository,
-            IPaymentEntityRepository paymentEntityRepository,
-            IUnitOfWork unitOfWork,
-            IEventPublisher<CreateBillEventBody> billEventPublisher,
-            IPaymentEntityService paymentEntityService)
-        {
-            _billRepository = billRepository;
-            _paymentEntityRepository = paymentEntityRepository;
-            _unitOfWork = unitOfWork;
-            _billEventPublisher = billEventPublisher;
-            _paymentEntityService = paymentEntityService;
-        }
-
         public async Task<Result<Guid>> HandleAsync(CreateBillCommand command, CancellationToken cancellationToken)
         {
             var domainCommand = new CreateBillDomainCommand(
@@ -48,7 +32,7 @@
                         bi.BillItemSources.Select(src => new CreateBillItemSourceDomainCommand(src.SourceType, src.SourceId)))),
                 command.BillSources.Select(src => new CreateBillSourceDomainCommand(src.SourceType, src.SourceId)));
 
-            var billResult = await Bill.CreateAsync(_paymentEntityService, domainCommand);
+            var billResult = await Bill.CreateAsync(paymentEntityService, domainCommand);
 
             if (billResult.IsFailed)
                 return Result.Fail(billResult.Errors);
@@ -56,16 +40,16 @@
             var bill = billResult.Value;    
 
             if (bill.Sender.PaymentEntity.Id == default)
-                await _paymentEntityRepository.AddAsync(bill.Sender.PaymentEntity);
+                await paymentEntityRepository.AddAsync(bill.Sender.PaymentEntity);
 
             if (bill.Receiver.PaymentEntity.Id == default)
-                await _paymentEntityRepository.AddAsync(bill.Receiver.PaymentEntity);
+                await paymentEntityRepository.AddAsync(bill.Receiver.PaymentEntity);
 
-            await _billRepository.AddAsync(bill);
+            await billRepository.AddAsync(bill);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await _billEventPublisher.PublishAsync(new CreateBillEventBody(bill.Id), cancellationToken);
+            await billEventPublisher.PublishAsync(new CreateBillEventBody(bill.Id), cancellationToken);
 
             return bill.Id;
         }

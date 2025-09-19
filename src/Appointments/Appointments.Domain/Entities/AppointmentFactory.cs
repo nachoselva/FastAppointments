@@ -11,8 +11,7 @@
                 var recurrenceCommand = new CreateRecurrenceDomainCommand(
                     command.StartOn,
                     command.EventsCount!.Value,
-                    command.Description,
-                    command.DurationInMinutes);
+                    command.Configuration);
 
                 return (Recurrence.Create(recurrenceCommand), null);
             }
@@ -20,7 +19,7 @@
             {
                 var eventCommand = new CreateEventDomainCommand(
                     command.StartOn,
-                    new CreateConfigurationDomainCommand(command.Description, command.DurationInMinutes));
+                    command.Configuration);
 
                 return (null, Event.Create(eventCommand));
             }

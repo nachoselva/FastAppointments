@@ -3,20 +3,25 @@
     using Appointments.Application.Abstractions;
     using Appointments.Domain.Entities;
     using Appointments.Infrastructure.Context;
+    using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Threading.Tasks;
 
-    internal class EventRepository : IEventRepository
+    internal class EventRepository(AppointmentsContext appointmentsContext) : IEventRepository
     {
-        private readonly AppointmentsContext _appointmentsContext;
-
-        public EventRepository(AppointmentsContext appointmentsContext)
-        {
-            _appointmentsContext = appointmentsContext;
-        }
-
         public async Task AddAsync(Event Event)
         {
-            await _appointmentsContext.Events.AddAsync(Event);
+            await appointmentsContext.Events.AddAsync(Event);
+        }
+
+        public async Task<Event?> GetAsync(Guid eventId)
+        {
+            return await appointmentsContext.Events
+                .Include(e => e.Configuration)
+                .ThenInclude(c => c!.Services)
+                .Include(e => e.Configuration)
+                .ThenInclude(c => c!.Attendes)
+                .FirstOrDefaultAsync(e => e.Id == eventId);
         }
     }
 }

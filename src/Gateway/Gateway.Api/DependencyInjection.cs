@@ -1,6 +1,6 @@
 ﻿namespace Gateway.Api
 {
-    using Gateway.Config;
+    using Common.Infrastructure.Configuration;
     using Ocelot.Configuration.File;
     using Ocelot.DependencyInjection;
 
@@ -13,7 +13,7 @@
             fileConfig.GlobalConfiguration ??= new FileGlobalConfiguration();
             fileConfig.GlobalConfiguration.BaseUrl = "http://localhost:5000";
 
-            var apiConfigs = builder.Configuration.GetRequiredSection("Apis").Get<ApiConfig[]>() ?? [];
+            var apiConfigs = builder.Configuration.GetApisConfig();
 
             foreach (var item in apiConfigs)
             {
@@ -26,7 +26,7 @@
                     DownstreamScheme = "http",
                     DownstreamHostAndPorts =
                     [
-                        new() { Host = item.Url, Port = item.Port }
+                        new() { Host = item.Host, Port = item.HttpPort }
                     ]
                 });
             }

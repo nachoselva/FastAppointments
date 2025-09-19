@@ -11,7 +11,7 @@
             builder.ToTable("Events");
 
             builder.HasOne(e => e.Recurrence)
-                .WithMany(r => r.Appointments)
+                .WithMany(r => r.Events)
                 .HasPrincipalKey(r => r.Id)
                 .HasForeignKey(e => e.RecurrenceId)
                 .IsRequired(false);

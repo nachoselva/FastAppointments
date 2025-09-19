@@ -1,6 +1,6 @@
 ﻿namespace Payments.Infrastructure.Configurations
 {
-    using Common.Infrastructure.Configuration;
+    using Common.Infrastructure.EFConfigurations;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using Payments.Domain.Entities;
@@ -15,18 +15,18 @@
 
             builder.ToTable("PaymentEntities", table => table.HasCheckConstraint(
                 "CK_PaymentEntity_ExternalId",
-                $"{ConfigurationExtensions.DeletedFilter()} OR (({clientIdColumnName} IS NOT NULL OR {providerIdColumnName} IS NOT NULL OR {companyIdColumnName} IS NOT NULL))"));
+                $"{EFConfigurationExtensions.DeletedFilter()} OR (({clientIdColumnName} IS NOT NULL OR {providerIdColumnName} IS NOT NULL OR {companyIdColumnName} IS NOT NULL))"));
 
             builder.HasIndex(e => new { e.ClientId, e.ProviderId, e.CompanyId })
                 .HasDeletedFilter();
             builder.HasIndex(e => e.ClientId)
-                .HasDeletedFilter()
+                .HasFilter($"{EFConfigurationExtensions.DeletedFilter()} AND {clientIdColumnName} IS NOT NULL")
                 .IsUnique();
             builder.HasIndex(e => e.ProviderId)
-                .HasDeletedFilter()
+                .HasFilter($"{EFConfigurationExtensions.DeletedFilter()} AND {providerIdColumnName} IS NOT NULL")
                 .IsUnique();
             builder.HasIndex(e => e.CompanyId)
-                .HasDeletedFilter()
+                .HasFilter($"{EFConfigurationExtensions.DeletedFilter()} AND {companyIdColumnName} IS NOT NULL")
                 .IsUnique();
         }
     }

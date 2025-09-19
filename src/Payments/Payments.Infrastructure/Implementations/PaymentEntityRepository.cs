@@ -1,4 +1,4 @@
-﻿namespace Payments.Infrastructure.Repositories
+﻿namespace Payments.Infrastructure.Implementations
 {
     using Microsoft.EntityFrameworkCore;
     using Payments.Application.Abstractions;
@@ -7,18 +7,11 @@
     using System;
     using System.Threading.Tasks;
 
-    public class PaymentEntityRepository : IPaymentEntityRepository
+    public class PaymentEntityRepository(PaymentsContext context) : IPaymentEntityRepository
     {
-        private readonly PaymentsContext _context;
-
-        public PaymentEntityRepository(PaymentsContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<PaymentEntity>> GetByExternalIds(Guid? clientId, Guid? providerId, Guid? companyId)
         {
-            var paymentEntities = await _context.PaymentEntities.Where(pe => 
+            var paymentEntities = await context.PaymentEntities.Where(pe => 
             pe.ClientId == clientId 
             || pe.ProviderId == providerId 
             || pe.CompanyId == companyId).ToListAsync();
@@ -27,7 +20,7 @@
         }
         public async Task AddAsync(PaymentEntity entity)
         {
-            await _context.PaymentEntities.AddAsync(entity);
+            await context.PaymentEntities.AddAsync(entity);
         }
     }
 }

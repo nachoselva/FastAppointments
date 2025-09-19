@@ -364,15 +364,15 @@ namespace Payments.Infrastructure.Migrations
 
                     b.HasIndex("ClientId")
                         .IsUnique()
-                        .HasFilter("Deleted = 0");
+                        .HasFilter("Deleted = 0 AND ClientId IS NOT NULL");
 
                     b.HasIndex("CompanyId")
                         .IsUnique()
-                        .HasFilter("Deleted = 0");
+                        .HasFilter("Deleted = 0 AND CompanyId IS NOT NULL");
 
                     b.HasIndex("ProviderId")
                         .IsUnique()
-                        .HasFilter("Deleted = 0");
+                        .HasFilter("Deleted = 0 AND ProviderId IS NOT NULL");
 
                     b.HasIndex("ClientId", "ProviderId", "CompanyId")
                         .HasFilter("Deleted = 0");

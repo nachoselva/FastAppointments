@@ -1,4 +1,4 @@
-﻿namespace Payments.Application.Events
+﻿namespace Common.Models.Payments
 {
     public record CreateBillEventBody(Guid Id);
 }

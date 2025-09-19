@@ -13,17 +13,6 @@ services:
         - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
     networks:
       - internal 
-
-  gateway.api-2:
-    build:
-        context: ../
-        dockerfile: src/Gateway/Gateway.Api-2/Dockerfile
-    ports:
-        - "5009:8080"
-    environment:
-        - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
-    networks:
-      - internal 
         
   appointments.api:
     build:

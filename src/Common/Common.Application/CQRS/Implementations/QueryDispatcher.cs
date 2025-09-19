@@ -5,19 +5,12 @@
     using System;
     using System.Threading.Tasks;
 
-    internal sealed class QueryDispatcher : IQueryDispatcher
+    internal sealed class QueryDispatcher(IServiceProvider serviceProvider) : IQueryDispatcher
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public QueryDispatcher(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
         public async Task<Result<TResult>> DispatchAsync<TQuery, TResult>(TQuery query, CancellationToken cancellationToken) where TQuery : IQuery<TResult>
         {
-            var handler = _serviceProvider.GetRequiredService<IQueryHandler<TQuery, TResult>>();
-            var validator = _serviceProvider.GetService<IQueryValidator<TQuery, TResult>>();
+            var handler = serviceProvider.GetRequiredService<IQueryHandler<TQuery, TResult>>();
+            var validator = serviceProvider.GetService<IQueryValidator<TQuery, TResult>>();
             if (validator != null)
             {
                 var validatorResult = await validator.ValidateAsync(query);

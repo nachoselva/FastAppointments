@@ -47,8 +47,8 @@
             {
                 Sender = senderResult.Value.PaymentAccounts.First(),
                 Receiver = receiverResult.Value.PaymentAccounts.First(),
-                BillItems = billItemsResults.Value.ToList(),
-                BillSources = billSourcesResults.Value.ToList(),
+                BillItems = [.. billItemsResults.Value],
+                BillSources = [.. billSourcesResults.Value],
                 TotalAmount = command.BillItems.Sum(bi => bi.UnitsCount * bi.PricePerUnit)
             };
         }

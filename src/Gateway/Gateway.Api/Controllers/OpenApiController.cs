@@ -1,4 +1,4 @@
-using Gateway.Config;
+using Common.Infrastructure.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.OpenApi.Extensions;
@@ -50,16 +50,16 @@ public partial class OpenApiController : ControllerBase
         var httpClient = _httpClientFactory.CreateClient();
         var mergedDocument = new OpenApiDocument
         {
-            Info = new OpenApiInfo { Title = "Fast Appointments Gateway", Version = "v1" },
+            Info = new OpenApiInfo { Title = "FastAppointments_Gateway.Api | v1", Version = "1.0.0" },
             Paths = [],
             Components = new OpenApiComponents()
         };
 
-        var apiConfigs = _configuration.GetSection("Apis")?.Get<ApiConfig[]>() ?? [];
+        var apiConfigs = _configuration.GetApisConfig();
 
         foreach (var item in apiConfigs)
         {
-            string paymentsJson = await httpClient.GetStringAsync($"http://{item.Url}:{item.Port}/openapi/v1.json");
+            string paymentsJson = await httpClient.GetStringAsync($"http://{item.Host}:{item.HttpPort}/openapi/v1.json");
             var reader = new OpenApiStringReader();
             var doc = reader.Read(paymentsJson, out _);
 

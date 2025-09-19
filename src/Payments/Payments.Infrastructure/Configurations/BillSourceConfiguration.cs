@@ -1,6 +1,6 @@
 ﻿namespace Payments.Infrastructure.Configurations
 {
-    using Common.Infrastructure.Configuration;
+    using Common.Infrastructure.EFConfigurations;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using Payments.Domain.Entities;

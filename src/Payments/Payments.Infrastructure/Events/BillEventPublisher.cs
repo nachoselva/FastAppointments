@@ -1,8 +1,8 @@
 ﻿namespace Payments.Infrastructure.Events
 {
     using Common.Infrastructure.Events;
+    using Common.Models.Payments;
     using Payments.Application.Abstractions;
-    using Payments.Application.Events;
     using RabbitMQ.Client;
 
     internal class BillEventPublisher : EventPublisher<CreateBillEventBody>, IEventPublisher<CreateBillEventBody>

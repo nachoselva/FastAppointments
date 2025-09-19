@@ -1,42 +1,51 @@
-﻿namespace Payments.Application.Bill.Create
+﻿namespace Appointments.Application.Implementations.Appointment.Create
 {
     using Appointments.Application.Abstractions;
     using Appointments.Domain.Commands;
     using Appointments.Domain.Entities;
     using Common.Application.CQRS;
     using Common.Application.Repositories;
+    using Common.Models.Payments;
     using FluentResults;
-    using Payments.Application.Implementations.Bill.Create;
+    using Payments.Application.Abstractions;
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class CreateAppointmentCommandHandler : ICommandHandler<CreateAppointmentCommand, Guid>
+    internal class CreateAppointmentCommandHandler(
+        IRecurrenceRepository recurrenceRepository,
+        IEventRepository eventRepository,
+        IUnitOfWork unitOfWork,
+        IEventPublisher<PendingBillEventBody> billEventPublisher) : ICommandHandler<CreateAppointmentCommand, Guid>
     {
-        private readonly IRecurrenceRepository _recurrenceRepository;
-        private readonly IEventRepository _eventRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        //private readonly IEventPublisher<CreateBillEventBody> _billEventPublisher;
-
-        public CreateAppointmentCommandHandler(IRecurrenceRepository recurrenceRepository, IEventRepository eventRepository, IUnitOfWork unitOfWork)
-        {
-            _recurrenceRepository = recurrenceRepository;
-            _eventRepository = eventRepository;
-            _unitOfWork = unitOfWork;
-        }
-
         public async Task<Result<Guid>> HandleAsync(CreateAppointmentCommand command, CancellationToken cancellationToken)
         {
-            var domainCommand = new CreateAppointmentDomainCommand(command.IsRecurrent, command.StartOn, command.EventsCount, command.Description, command.DurationInMinutes);
+            var domainCommand = new CreateAppointmentDomainCommand(
+                command.IsRecurrent,
+                command.StartOn,
+                command.EventsCount,
+                new CreateConfigurationDomainCommand(
+                    command.Configuration.Description, 
+                    command.Configuration.DurationInMinutes, 
+                    command.Configuration.Services.Select(s => new AppointmentServiceDomainCommand(s.ExternalServiceId, s.UnitsCount)),
+                    command.Configuration.Attendes.Select(a => new AppointmentAttendeDomainCommand(a.Category, a.Type, a.ExternalId, a.IsOptional))));
 
             var (recurrence, @event) = AppointmentFactory.Create(domainCommand);
 
             if (recurrence != null)
-                await _recurrenceRepository.AddAsync(recurrence);
+                await recurrenceRepository.AddAsync(recurrence);
 
             if (@event != null)
-                await _eventRepository.AddAsync(@event);
+                await eventRepository.AddAsync(@event);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+
+            List<Event> eventToPublish = [];
+            if (recurrence?.Events != null)
+                eventToPublish.AddRange(recurrence.Events);
+            if (@event != null)
+                eventToPublish.Add(@event);
+            
+            await billEventPublisher.PublishAsync(eventToPublish.Select(ev => new PendingBillEventBody("Event", ev.Id)), cancellationToken);
 
             return recurrence?.Id ?? @event!.Id;
         }

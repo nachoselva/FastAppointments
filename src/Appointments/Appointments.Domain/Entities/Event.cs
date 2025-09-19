@@ -23,7 +23,10 @@
 
         public static Event Create(CreateEventDomainCommand command)
         {
-            return new Event(command.StartOn);
+            return new Event(command.StartOn)
+            {
+                Configuration = command.Configuration != null ? AppointmentConfiguration.Create(command.Configuration) : null
+            };
         }
     }
 }

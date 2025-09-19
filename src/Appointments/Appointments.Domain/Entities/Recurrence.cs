@@ -22,14 +22,14 @@
         public Guid? AppointmentConfigurationId { get; private set; }
 
         public virtual AppointmentConfiguration? Configuration { get; private set; } = null!;
-        public virtual ICollection<Event> Appointments { get; private set; } = null!;
+        public virtual ICollection<Event> Events { get; private set; } = null!;
 
         internal static Recurrence Create(CreateRecurrenceDomainCommand command)
         {
             int events = command.EventsCount!.Value;
             DateTime lastStartOn = command.StartOn.AddDays(events);
 
-            AppointmentConfiguration configuration = AppointmentConfiguration.Create(new CreateConfigurationDomainCommand(command.Description, command.DurationInMinutes));
+            AppointmentConfiguration configuration = AppointmentConfiguration.Create(command.Configuration);
             Event[] appointments =
                 [.. Enumerable
                 .Range(0, events)
@@ -42,7 +42,7 @@
             return new Recurrence(command.StartOn, lastStartOn)
             {
                 Configuration = configuration,
-                Appointments = appointments
+                Events = appointments
             };
         }
     }

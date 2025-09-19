@@ -1,7 +1,7 @@
 ﻿namespace Appointments.Domain.Entities
 {
-    using Appointments.Domain.Enums;
     using Common.Domain;
+    using Common.Models.Enums;
 
     public class Attende : DomainEntity
     {

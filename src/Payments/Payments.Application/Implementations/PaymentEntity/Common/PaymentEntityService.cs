@@ -5,21 +5,13 @@
     using Payments.Domain.Abstractions;
     using Payments.Domain.Entities;
     using System;
-    using System.ComponentModel.Design;
     using System.Threading.Tasks;
 
-    internal class PaymentEntityService : IPaymentEntityService
+    internal class PaymentEntityService(IPaymentEntityRepository repository) : IPaymentEntityService
     {
-        private readonly IPaymentEntityRepository _repository;
-
-        public PaymentEntityService(IPaymentEntityRepository repository)
-        {
-            _repository = repository;
-        }
-
         public async Task<Result<PaymentEntity?>> GetByExternalIds(Guid? clientId, Guid? providerId, Guid? companyId)
         {
-            var paymentEntities = await _repository.GetByExternalIds(clientId, providerId, companyId);
+            var paymentEntities = await repository.GetByExternalIds(clientId, providerId, companyId);
 
             if (paymentEntities.Count() > 1)
                 return Result.Fail("Multiple PaymentEntities found with the same external IDs.");

@@ -1,25 +1,27 @@
 ﻿namespace Payments.Infrastructure;
 
 using Common.Infrastructure;
+using Common.Models.Payments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Payments.Application.Abstractions;
-using Payments.Application.Events;
 using Payments.Infrastructure.Context;
 using Payments.Infrastructure.Events;
-using Payments.Infrastructure.Repositories;
+using Payments.Infrastructure.Implementations;
 
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpClients(configuration);
         services.AddDatabase<PaymentsContext>(configuration);
         services.AddScoped<IBillRepository, BillRepository>();
         services.AddScoped<IPaymentEntityRepository, PaymentEntityRepository>();
         services.AddEventConnection(configuration);
         services.AddEventReceiver<BillEventReceiver, CreateBillEventBody>();
         services.AddEventPublisher<BillEventPublisher, CreateBillEventBody>();
+        services.AddEventReceiver<BillPendingReceiver, PendingBillEventBody>();
 
         MigrateDatabase(configuration);
 

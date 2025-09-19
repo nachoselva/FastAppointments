@@ -30,16 +30,33 @@
             if (_channel == null || _channel.IsClosed)
                 await InitConnectionAndChannel();
 
-            var json = JsonSerializer.Serialize(eventToBePublished);
-            var body = Encoding.UTF8.GetBytes(json);
+            await PublishMessageWithOpenedConnection(eventToBePublished, cancellationToken);
+        }
 
-            await _channel!.BasicPublishAsync(exchange: ExchangeName, routingKey: string.Empty, body: body, cancellationToken: cancellationToken);
+        public async Task PublishAsync(IEnumerable<T> eventToBePublished, CancellationToken cancellationToken)
+        {
+            if (_connection == null || !_connection.IsOpen)
+                await InitConnectionAndChannel();
+
+            if (_channel == null || _channel.IsClosed)
+                await InitConnectionAndChannel();
+
+            foreach (var item in eventToBePublished)
+                await PublishMessageWithOpenedConnection(item, cancellationToken);
         }
 
         public void Dispose()
         {
             GC.SuppressFinalize(this);
             DisposeAsync().GetAwaiter().GetResult();
+        }
+
+        private async Task PublishMessageWithOpenedConnection(T eventToBePublished, CancellationToken cancellationToken)
+        {
+            var json = JsonSerializer.Serialize(eventToBePublished);
+            var body = Encoding.UTF8.GetBytes(json);
+
+            await _channel!.BasicPublishAsync(exchange: ExchangeName, routingKey: string.Empty, body: body, cancellationToken: cancellationToken);
         }
 
         private async Task InitConnectionAndChannel()

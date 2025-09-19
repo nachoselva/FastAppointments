@@ -13,12 +13,14 @@
             DurationInMinutes = durationInMinutes;
         }
 
+
         protected AppointmentConfiguration()
         {
 
         }
 
-        public string Description { get; private set; }
+
+        public string Description { get; private set; } = string.Empty;
         public int DurationInMinutes { get; private set; }
 
         public virtual Recurrence? Recurrence { get; private set; } = null!;
@@ -28,7 +30,11 @@
 
         internal static AppointmentConfiguration Create(CreateConfigurationDomainCommand command)
         {
-            return new AppointmentConfiguration(command.Description, command.DurationInMinutes);
+            return new AppointmentConfiguration(command.Description, command.DurationInMinutes)
+            {
+                Services = [.. command.Services.Select(s => Service.Create(s.UnitsCount, s.ExternalServiceId))],
+                Attendes = [.. command.Attendes.Select(a => Attende.Create(a.Category, a.Type, a.ExternalId, a.IsOptional))]
+            };
         }
     }
 }

@@ -17,7 +17,7 @@
 
         }
 
-        public string SourceType { get; private set; }
+        public string SourceType { get; private set; } = string.Empty;
         public Guid SourceId { get; private set; }
 
         public Guid BillId { get; private set; }

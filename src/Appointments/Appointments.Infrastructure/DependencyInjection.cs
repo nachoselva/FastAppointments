@@ -2,8 +2,10 @@
 
 using Appointments.Application.Abstractions;
 using Appointments.Infrastructure.Context;
+using Appointments.Infrastructure.Events;
 using Appointments.Infrastructure.Implementations;
 using Common.Infrastructure;
+using Common.Models.Payments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,8 @@ public static class DependencyInjection
         services.AddDatabase<AppointmentsContext>(configuration);
         services.AddScoped<IRecurrenceRepository, RecurrenceRepository>();
         services.AddScoped<IEventRepository, EventRepository>();
+        services.AddEventConnection(configuration);
+        services.AddEventPublisher<AppointmentsEventPublisher, PendingBillEventBody>();
 
         MigrateDatabase(configuration);
 

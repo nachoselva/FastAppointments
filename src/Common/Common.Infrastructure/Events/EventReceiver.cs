@@ -8,10 +8,9 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public abstract class EventReceiver<TEvent> : IHostedService, IDisposable
+    public abstract class EventReceiver<TEvent>(ConnectionFactory factory) : IHostedService, IDisposable
     {
         private readonly SemaphoreSlim _channelSemaphore = new(1, 1);
-        private readonly ConnectionFactory _connectionFactory;
         private IConnection? _connection;
         private IChannel? _channel;
         private AsyncEventingBasicConsumer? _consumer;
@@ -19,11 +18,6 @@
         protected abstract string ExchangeName { get; }
         protected abstract string QueueName { get; }
         protected abstract Func<TEvent, Task> ProcessEvent { get; }
-
-        protected EventReceiver(ConnectionFactory factory)
-        {
-            _connectionFactory = factory;
-        }
 
         public async Task StartAsync(CancellationToken _)
         {
@@ -40,7 +34,7 @@
         public void Dispose()
         {
             GC.SuppressFinalize(this);
-            DisposeAsync().GetAwaiter().GetResult();
+            DisposeAsync().AsTask().GetAwaiter().GetResult();
         }
 
         private async Task InitConnectionAndChannel()
@@ -50,7 +44,7 @@
             {
                 if (_connection == null || !_connection.IsOpen)
                 {
-                    _connection = await _connectionFactory.CreateConnectionAsync();
+                    _connection = await factory.CreateConnectionAsync();
                 }
 
                 if (_channel == null || !_channel.IsOpen)
