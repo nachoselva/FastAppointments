@@ -9,6 +9,11 @@
         public void Configure(EntityTypeBuilder<Service> builder)
         {
             builder.ToTable("Services");
+
+            builder.HasOne(t => t.Tier)
+                   .WithMany(s => s.Services)
+                   .HasForeignKey(t => t.ServiceTierId)
+                   .HasPrincipalKey(s => s.Id);
         }
     }
 }

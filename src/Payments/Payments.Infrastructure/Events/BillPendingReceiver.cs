@@ -6,6 +6,7 @@
     using Common.Models.Appointments;
     using Common.Models.Enums;
     using Common.Models.Payments;
+    using Common.Models.Setups;
     using Microsoft.Extensions.DependencyInjection;
     using Payments.Application.Implementations.Bill.Create;
     using Payments.Application.Implementations.PaymentEntity.Common;
@@ -48,41 +49,30 @@
 
         private async Task<CreateBillCommand?> ProcessEventBill(Guid sourceId)
         {
-            IEnumerable<CreateBillItemCommand> BuildBillItemCommands(IEnumerable<GetExternalServiceResponse> eventServices, IEnumerable<GetServiceResponse> services)
+            IEnumerable<CreateBillItemCommand> BuildBillItemCommands(IEnumerable<GetExternalServiceResponse> services, IEnumerable<GetServiceProvisionResponse> serviceProvisions)
             {
-                return eventServices.Select(es =>
+                return services.Select((s, index) =>
                 {
-                    var service = services.First(s => s.Id == es.ExternalServiceId);
+                    var sp = serviceProvisions.ElementAt(index);
+
                     return new CreateBillItemCommand(
-                        service.Description,
-                        service.PricePerUnit,
-                        es.UnitsCount,
-                        service.UnitsName,
+                        sp.Service.Name,
+                        sp.Price.PricePerUnit,
+                        s.UnitsCount,
+                        sp.Service.UnitsName,
                         [
-                            new CreateBillItemSourceCommand("ServiceProvision", service.Id)
+                            new CreateBillItemSourceCommand("ServiceProvision", sp.Service.Id)
                         ]);
                 });
             }
 
-            CreateBillCommand? BuildBillCommand(GetEventResponse @event, IEnumerable<GetServiceResponse> services)
+            CreateBillCommand? BuildBillCommand(Guid eventId, IEnumerable<GetExternalServiceResponse> services, GetAttendeResponse client, GetAttendeResponse provider, IEnumerable<GetServiceProvisionResponse> serviceProvisions)
             {
-                var client = @event.Attendes.FirstOrDefault(a => a.Type == AttendeType.Client && a.Category == AttendeCategory.Main);
-                var provider = @event.Attendes.FirstOrDefault(a => a.Type == AttendeType.Provider && a.Category == AttendeCategory.Main);
-
-                if (client == null)
-                    return null;
-
-                if (provider == null)
-                    return null;
-
-                if (services == null)
-                    return null;
-
                 return new CreateBillCommand(
                     new PaymentEntityCommand(client.ExternalId, null, null),
                     new PaymentEntityCommand(null, provider.ExternalId, null),
-                    BuildBillItemCommands(@event.Services, services),
-                    [new CreateBillSourceCommand("Event", @event.Id)]
+                    BuildBillItemCommands(services, serviceProvisions),
+                    [new CreateBillSourceCommand("Event", eventId)]
                 );
             }
 
@@ -90,22 +80,33 @@
 
             var appointmentsHttpClient = scope.ServiceProvider.GetRequiredService<AppointmentsClient>();
 
-            //var setupsHttpClient = httpClientFactory.CreateClient("SetupsApi");
+            var setupsHttpClient = scope.ServiceProvider.GetRequiredService<SetupsClient>();
 
             GetEventResponse? @event = await appointmentsHttpClient.GetEvent(sourceId);
 
             if (@event == null)
                 return null;
 
-            var externalServiceIdParams = @event.Services.Select(s => $"Id={s}");
-            //var services = await setupsHttpClient.GetFromJsonAsync<IEnumerable<GetServiceResponse>>($"services/many?{string.Join(',', externalServiceIdParams)}");
+            var client = @event.Attendes.FirstOrDefault(a => a.Type == AttendeType.Client && a.Category == AttendeCategory.Main);
+            var provider = @event.Attendes.FirstOrDefault(a => a.Type == AttendeType.Provider && a.Category == AttendeCategory.Main);
 
-            var services = @event.Services.Select(s => new GetServiceResponse(s.ExternalServiceId, "test", 10, "units"));
-
-            if (services == null || services.Count() != @event.Services.Count())
+            if (client == null || provider == null)
                 return null;
 
-            return BuildBillCommand(@event, services);
+            var serviceRange = Enumerable.Range(0, @event.Services.Count());
+
+            var searchBody = new SearchServiceProvisionsRequest(
+                @event.Services.Select(e => e.ExternalServiceId),
+                serviceRange.Select(_ => @event.ExternalLocationId),
+                serviceRange.Select(_ => client.ExternalId),
+                serviceRange.Select(_ => provider.ExternalId));
+
+            IEnumerable<GetServiceProvisionResponse?>? serviceProvisions = await setupsHttpClient.SearchServiceProvisions(searchBody);
+
+            if (serviceProvisions == null || serviceProvisions.Any(sp => sp == null) || serviceProvisions.Count() != @event.Services.Count())
+                return null;
+
+            return BuildBillCommand(@event.Id, @event.Services, client, provider, serviceProvisions!);
         }
     }
 }

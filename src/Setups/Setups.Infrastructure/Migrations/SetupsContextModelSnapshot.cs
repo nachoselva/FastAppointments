@@ -189,6 +189,105 @@ namespace Setups.Infrastructure.Migrations
                             }));
                 });
 
+            modelBuilder.Entity("Setups.Domain.Entities.Client", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClientTierId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("ExternalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("VersionEndFrom")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("VersionEndFrom");
+
+                    b.Property<DateTime>("VersionStartFrom")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("VersionStartFrom");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientTierId");
+
+                    b.ToTable("Clients", (string)null);
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                            {
+                                ttb.UseHistoryTable("ClientsHistory");
+                                ttb
+                                    .HasPeriodStart("VersionStartFrom")
+                                    .HasColumnName("VersionStartFrom");
+                                ttb
+                                    .HasPeriodEnd("VersionEndFrom")
+                                    .HasColumnName("VersionEndFrom");
+                            }));
+                });
+
+            modelBuilder.Entity("Setups.Domain.Entities.ClientTier", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("VersionEndFrom")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("VersionEndFrom");
+
+                    b.Property<DateTime>("VersionStartFrom")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("VersionStartFrom");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClientTiers", (string)null);
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                            {
+                                ttb.UseHistoryTable("ClientTiersHistory");
+                                ttb
+                                    .HasPeriodStart("VersionStartFrom")
+                                    .HasColumnName("VersionStartFrom");
+                                ttb
+                                    .HasPeriodEnd("VersionEndFrom")
+                                    .HasColumnName("VersionEndFrom");
+                            }));
+                });
+
             modelBuilder.Entity("Setups.Domain.Entities.Country", b =>
                 {
                     b.Property<Guid>("Id")
@@ -248,7 +347,7 @@ namespace Setups.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BuildingId")
+                    b.Property<Guid?>("BuildingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedOn")
@@ -262,6 +361,9 @@ namespace Setups.Infrastructure.Migrations
                     b.Property<string>("Floor")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid>("LocationTierId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -288,6 +390,8 @@ namespace Setups.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BuildingId");
+
+                    b.HasIndex("LocationTierId");
 
                     b.ToTable("Locations", (string)null);
 
@@ -351,7 +455,58 @@ namespace Setups.Infrastructure.Migrations
                             }));
                 });
 
-            modelBuilder.Entity("Setups.Domain.Entities.Service", b =>
+            modelBuilder.Entity("Setups.Domain.Entities.Provider", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("ExternalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProviderTierId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("VersionEndFrom")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("VersionEndFrom");
+
+                    b.Property<DateTime>("VersionStartFrom")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("VersionStartFrom");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProviderTierId");
+
+                    b.ToTable("Providers", (string)null);
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                            {
+                                ttb.UseHistoryTable("ProvidersHistory");
+                                ttb
+                                    .HasPeriodStart("VersionStartFrom")
+                                    .HasColumnName("VersionStartFrom");
+                                ttb
+                                    .HasPeriodEnd("VersionEndFrom")
+                                    .HasColumnName("VersionEndFrom");
+                            }));
+                });
+
+            modelBuilder.Entity("Setups.Domain.Entities.ProviderTier", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -384,6 +539,64 @@ namespace Setups.Infrastructure.Migrations
                         .HasColumnName("VersionStartFrom");
 
                     b.HasKey("Id");
+
+                    b.ToTable("ProviderTiers", (string)null);
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                            {
+                                ttb.UseHistoryTable("ProviderTiersHistory");
+                                ttb
+                                    .HasPeriodStart("VersionStartFrom")
+                                    .HasColumnName("VersionStartFrom");
+                                ttb
+                                    .HasPeriodEnd("VersionEndFrom")
+                                    .HasColumnName("VersionEndFrom");
+                            }));
+                });
+
+            modelBuilder.Entity("Setups.Domain.Entities.Service", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid>("ServiceTierId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UnitsName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("VersionEndFrom")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("VersionEndFrom");
+
+                    b.Property<DateTime>("VersionStartFrom")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("VersionStartFrom");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceTierId");
 
                     b.ToTable("Services", (string)null);
 
@@ -423,7 +636,7 @@ namespace Setups.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ServicePriceId")
+                    b.Property<Guid>("ServiceProvisionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("VersionEndFrom")
@@ -438,7 +651,7 @@ namespace Setups.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ServicePriceId");
+                    b.HasIndex("ServiceProvisionId");
 
                     b.ToTable("ServiceCommissions", (string)null);
 
@@ -481,7 +694,7 @@ namespace Setups.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ServicePriceId")
+                    b.Property<Guid>("ServiceProvisionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("VersionEndFrom")
@@ -496,7 +709,7 @@ namespace Setups.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ServicePriceId");
+                    b.HasIndex("ServiceProvisionId");
 
                     b.ToTable("ServiceDiscounts", (string)null);
 
@@ -579,6 +792,9 @@ namespace Setups.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ClientTierId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -596,7 +812,7 @@ namespace Setups.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ServiceId")
+                    b.Property<Guid>("ProviderTierId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ServiceTierId")
@@ -617,9 +833,11 @@ namespace Setups.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientTierId");
+
                     b.HasIndex("LocationTierId");
 
-                    b.HasIndex("ServiceId");
+                    b.HasIndex("ProviderTierId");
 
                     b.HasIndex("ServiceTierId");
 
@@ -659,9 +877,6 @@ namespace Setups.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("VersionEndFrom")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -673,8 +888,6 @@ namespace Setups.Infrastructure.Migrations
                         .HasColumnName("VersionStartFrom");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ServiceId");
 
                     b.ToTable("ServiceTiers", (string)null);
 
@@ -830,37 +1043,77 @@ namespace Setups.Infrastructure.Migrations
                     b.Navigation("State");
                 });
 
+            modelBuilder.Entity("Setups.Domain.Entities.Client", b =>
+                {
+                    b.HasOne("Setups.Domain.Entities.ClientTier", "Tier")
+                        .WithMany("Clients")
+                        .HasForeignKey("ClientTierId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Tier");
+                });
+
             modelBuilder.Entity("Setups.Domain.Entities.Location", b =>
                 {
                     b.HasOne("Setups.Domain.Entities.Building", "Building")
                         .WithMany("Locations")
                         .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Setups.Domain.Entities.LocationTier", "Tier")
+                        .WithMany("Locations")
+                        .HasForeignKey("LocationTierId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Building");
+
+                    b.Navigation("Tier");
+                });
+
+            modelBuilder.Entity("Setups.Domain.Entities.Provider", b =>
+                {
+                    b.HasOne("Setups.Domain.Entities.ProviderTier", "Tier")
+                        .WithMany("Providers")
+                        .HasForeignKey("ProviderTierId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Tier");
+                });
+
+            modelBuilder.Entity("Setups.Domain.Entities.Service", b =>
+                {
+                    b.HasOne("Setups.Domain.Entities.ServiceTier", "Tier")
+                        .WithMany("Services")
+                        .HasForeignKey("ServiceTierId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Tier");
                 });
 
             modelBuilder.Entity("Setups.Domain.Entities.ServiceCommission", b =>
                 {
-                    b.HasOne("Setups.Domain.Entities.ServicePrice", "ServicePrice")
+                    b.HasOne("Setups.Domain.Entities.ServiceProvision", "ServiceProvision")
                         .WithMany("Commissions")
-                        .HasForeignKey("ServicePriceId")
+                        .HasForeignKey("ServiceProvisionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("ServicePrice");
+                    b.Navigation("ServiceProvision");
                 });
 
             modelBuilder.Entity("Setups.Domain.Entities.ServiceDiscount", b =>
                 {
-                    b.HasOne("Setups.Domain.Entities.ServicePrice", "ServicePrice")
+                    b.HasOne("Setups.Domain.Entities.ServiceProvision", "ServiceProvision")
                         .WithMany("Discounts")
-                        .HasForeignKey("ServicePriceId")
+                        .HasForeignKey("ServiceProvisionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("ServicePrice");
+                    b.Navigation("ServiceProvision");
                 });
 
             modelBuilder.Entity("Setups.Domain.Entities.ServicePrice", b =>
@@ -876,15 +1129,21 @@ namespace Setups.Infrastructure.Migrations
 
             modelBuilder.Entity("Setups.Domain.Entities.ServiceProvision", b =>
                 {
+                    b.HasOne("Setups.Domain.Entities.ClientTier", "ClientTier")
+                        .WithMany("ServiceProvisions")
+                        .HasForeignKey("ClientTierId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Setups.Domain.Entities.LocationTier", "LocationTier")
                         .WithMany("ServiceProvisions")
                         .HasForeignKey("LocationTierId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Setups.Domain.Entities.Service", "Service")
+                    b.HasOne("Setups.Domain.Entities.ProviderTier", "ProviderTier")
                         .WithMany("ServiceProvisions")
-                        .HasForeignKey("ServiceId")
+                        .HasForeignKey("ProviderTierId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -894,22 +1153,13 @@ namespace Setups.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.Navigation("ClientTier");
+
                     b.Navigation("LocationTier");
 
-                    b.Navigation("Service");
+                    b.Navigation("ProviderTier");
 
                     b.Navigation("ServiceTier");
-                });
-
-            modelBuilder.Entity("Setups.Domain.Entities.ServiceTier", b =>
-                {
-                    b.HasOne("Setups.Domain.Entities.Service", "Service")
-                        .WithMany("ServiceTiers")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("Setups.Domain.Entities.State", b =>
@@ -938,6 +1188,13 @@ namespace Setups.Infrastructure.Migrations
                     b.Navigation("Addresses");
                 });
 
+            modelBuilder.Entity("Setups.Domain.Entities.ClientTier", b =>
+                {
+                    b.Navigation("Clients");
+
+                    b.Navigation("ServiceProvisions");
+                });
+
             modelBuilder.Entity("Setups.Domain.Entities.Country", b =>
                 {
                     b.Navigation("States");
@@ -945,31 +1202,32 @@ namespace Setups.Infrastructure.Migrations
 
             modelBuilder.Entity("Setups.Domain.Entities.LocationTier", b =>
                 {
+                    b.Navigation("Locations");
+
                     b.Navigation("ServiceProvisions");
                 });
 
-            modelBuilder.Entity("Setups.Domain.Entities.Service", b =>
+            modelBuilder.Entity("Setups.Domain.Entities.ProviderTier", b =>
                 {
+                    b.Navigation("Providers");
+
                     b.Navigation("ServiceProvisions");
-
-                    b.Navigation("ServiceTiers");
-                });
-
-            modelBuilder.Entity("Setups.Domain.Entities.ServicePrice", b =>
-                {
-                    b.Navigation("Commissions");
-
-                    b.Navigation("Discounts");
                 });
 
             modelBuilder.Entity("Setups.Domain.Entities.ServiceProvision", b =>
                 {
+                    b.Navigation("Commissions");
+
+                    b.Navigation("Discounts");
+
                     b.Navigation("Prices");
                 });
 
             modelBuilder.Entity("Setups.Domain.Entities.ServiceTier", b =>
                 {
                     b.Navigation("ServiceProvisions");
+
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("Setups.Domain.Entities.State", b =>

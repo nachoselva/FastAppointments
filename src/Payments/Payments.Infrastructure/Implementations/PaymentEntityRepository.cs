@@ -11,10 +11,10 @@
     {
         public async Task<IEnumerable<PaymentEntity>> GetByExternalIds(Guid? clientId, Guid? providerId, Guid? companyId)
         {
-            var paymentEntities = await context.PaymentEntities.Where(pe => 
-            pe.ClientId == clientId 
-            || pe.ProviderId == providerId 
-            || pe.CompanyId == companyId).ToListAsync();
+            var paymentEntities = await context.PaymentEntities.Where(pe =>
+            (clientId == null || pe.ClientId!.Value == clientId)
+            && (providerId == null || pe.ProviderId!.Value == providerId)
+            && (companyId == null || pe.CompanyId!.Value == companyId)).ToListAsync();
 
             return paymentEntities;
         }

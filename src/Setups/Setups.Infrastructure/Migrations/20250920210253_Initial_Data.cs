@@ -2,15 +2,10 @@
 
 namespace Setups.Infrastructure.Migrations
 {
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Migrations;
-    using Microsoft.Extensions.Configuration;
-    using Setups.Domain.Commands;
-    using Setups.Domain.Entities;
-    using Setups.Infrastructure.Context;
 
     /// <inheritdoc />
-    public partial class CountrySeed : Migration
+    public partial class Initial_Data : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -268,7 +263,40 @@ namespace Setups.Infrastructure.Migrations
 					('6D607363-B64E-42A4-A106-BCD6CE667333', 'Houston', '0D754F99-3393-49A3-8A9B-448B2E3355E8', @now),
 					('7B45885D-2FAE-4A4E-939A-ADDB435A07F3', 'Dallas', '0D754F99-3393-49A3-8A9B-448B2E3355E8', @now),
 					('22D0C223-8B6A-4313-AC57-EAE861BA85EA', 'Austin', '0D754F99-3393-49A3-8A9B-448B2E3355E8', @now);");
-    }
+
+            migrationBuilder.Sql(
+                @"
+				DECLARE @now DATETIME = GETUTCDATE();
+
+				INSERT INTO [ServiceTiers] (Id, Name, CreatedOn) VALUES
+					('31CC1799-1C78-45B5-B00A-81D72803249C', 'Medical Luxury Services', @now),
+					('E19A06D4-FBFC-42DC-98D3-0A264723FCF6', 'Medical Regular Services', @now),
+					('F1EB18D3-55D8-4725-A743-0579A0EF4FCF', 'Kinesology Services', @now);
+
+				INSERT INTO [LocationTiers] (Id, Name, CreatedOn) VALUES
+					('E2FB30DB-032F-49C6-88E6-A2AA31A00339', 'Remote', @now),
+					('2C8CA99A-B406-42F1-B947-244986169CC9', 'Home', @now),
+					('E89EF6AC-0D52-47FB-874E-7E43055F66B9', 'Medical Centre', @now);
+
+				INSERT INTO [ClientTiers] (Id, Name, CreatedOn) VALUES
+					('DB3099F6-3D42-43E3-B01C-7E8CDDA8B475', 'Black', @now),
+					('C60DE3D7-4586-4A99-9A32-7CEEEB7AF3C5', 'Platinum', @now),
+					('3D715B58-B464-4014-AC99-E83BA8332252', 'Gold', @now),
+					('36B3AC36-B22A-4742-90F4-222D44711B5A', 'White', @now);
+
+				INSERT INTO [ProviderTiers] (Id, Name, CreatedOn) VALUES
+					('109F75EF-7933-4559-8896-96E4C1DAA2A4', 'Doctorate', @now),
+					('ECF0ED73-8EDE-471F-9AE4-544F9BA491AE', 'Master', @now),
+					('2C2E50EC-D157-49BB-98AA-528F82A71176', 'Bachelor', @now);
+
+				INSERT INTO [Services] (Id, Name, ServiceTierId, CreatedOn) VALUES
+					('D3C74F28-E8B4-47E5-9344-447D4A459647', 'Medical Appointment', '31CC1799-1C78-45B5-B00A-81D72803249C', @now),
+					('45C75E22-DA04-4D0E-9D5E-673ECAA7B6AA', 'Massage', 'E19A06D4-FBFC-42DC-98D3-0A264723FCF6', @now);
+
+				INSERT INTO [Locations] (Id, LocationTierId, Name, CreatedOn, Floor, Room, BuildingId) VALUES
+					('7F2E8DB7-383A-4336-8E1D-E3A0689406C3', 'E2FB30DB-032F-49C6-88E6-A2AA31A00339', 'Remote', @now, NULL, NULL, NULL),
+					('B40014E5-034B-4474-99C1-F26ECB21DD0A', '2C8CA99A-B406-42F1-B947-244986169CC9', 'Home', @now, NULL, NULL, NULL);");
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)

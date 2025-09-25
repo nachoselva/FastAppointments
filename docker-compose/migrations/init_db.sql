@@ -33,6 +33,10 @@ ALTER ROLE db_datareader ADD MEMBER [$(MIGRATOR_USER)];
 ALTER ROLE db_datawriter ADD MEMBER [$(MIGRATOR_USER)];
 GO
 
+-- Ensure database-level rights for migrations
+GRANT CONTROL ON DATABASE::[$(DB_NAME)] TO [$(MIGRATOR_USER)];
+GO
+
 -- ===== Application User =====
 IF NOT EXISTS (SELECT name FROM sys.sql_logins WHERE name = '$(APPLICATION_USER)')
 BEGIN

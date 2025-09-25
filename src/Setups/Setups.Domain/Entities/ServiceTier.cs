@@ -5,27 +5,17 @@
     using System;
     using System.Collections.Generic;
 
-    public class ServiceTier : DomainEntity
+    public class ServiceTier : BaseTierEntity
     {
-        private ServiceTier(string name)
-        {
-            Name = name;
-        }
+        private ServiceTier(string name) : base(name) { }
 
-        protected ServiceTier() { }
+        protected ServiceTier() : base() { }
 
-        public string Name { get; private set; } = string.Empty;
-        public Guid ServiceId { get; private set; } = default;
-        public virtual Service Service { get; private set; } = null!;
-        public virtual ICollection<ServiceProvision> ServiceProvisions { get; private set; } = null!;
+        public virtual ICollection<Service> Services { get; private set; } = null!;
 
         internal static ServiceTier Create(CreateServiceTierDomainCommand model)
         {
-            return new ServiceTier(model.Name)
-            {
-                Service = null!,
-                ServiceId = default
-            };
+            return new ServiceTier(model.Name);
         }
     }
 }

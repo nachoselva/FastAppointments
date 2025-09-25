@@ -10,9 +10,9 @@
         {
             builder.ToTable("ServiceDiscounts");
 
-            builder.HasOne(d => d.ServicePrice)
+            builder.HasOne(d => d.ServiceProvision)
                    .WithMany(sp => sp.Discounts)
-                   .HasForeignKey(d => d.ServicePriceId)
+                   .HasForeignKey(d => d.ServiceProvisionId)
                    .HasPrincipalKey(sp => sp.Id);
         }
     }

@@ -26,6 +26,7 @@
                 new CreateConfigurationDomainCommand(
                     command.Configuration.Description, 
                     command.Configuration.DurationInMinutes, 
+                    command.Configuration.ExternalLocationId,
                     command.Configuration.Services.Select(s => new AppointmentServiceDomainCommand(s.ExternalServiceId, s.UnitsCount)),
                     command.Configuration.Attendes.Select(a => new AppointmentAttendeDomainCommand(a.Category, a.Type, a.ExternalId, a.IsOptional))));
 

@@ -3,6 +3,7 @@
     public sealed record CreateAppointmentConfigurationCommand(
         string Description,
         int DurationInMinutes,
+        Guid ExternalLocationId,
         IEnumerable<AppointmentServiceCommand> Services,
         IEnumerable<AppointmentAttendeCommand> Attendes);
 }

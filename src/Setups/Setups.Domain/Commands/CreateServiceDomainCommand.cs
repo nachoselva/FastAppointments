@@ -1,4 +1,4 @@
 ﻿namespace Setups.Domain.Commands
 {
-    public sealed record CreateServiceDomainCommand(string Name);
+    public sealed record CreateServiceDomainCommand(string Name, string UnitsName);
 }

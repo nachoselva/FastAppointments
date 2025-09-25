@@ -26,6 +26,7 @@
                 @event.StartOn,
                 config.Description,
                 config.DurationInMinutes,
+                config.ExternalLocationId,
                 config.Services.Select(s => new GetExternalServiceResponse(s.ExternalServiceId, s.UnitsCount)),
                 config.Attendes.Select(a => new GetAttendeResponse(a.Category, a.Type, a.ExternalId, a.IsOptional)));
         }

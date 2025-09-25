@@ -47,6 +47,9 @@ namespace Appointments.Infrastructure.Migrations
                     b.Property<int>("DurationInMinutes")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("ExternalLocationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -322,7 +325,7 @@ namespace Appointments.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Appointments.Domain.Entities.Recurrence", "Recurrence")
-                        .WithMany("Appointments")
+                        .WithMany("Events")
                         .HasForeignKey("RecurrenceId")
                         .OnDelete(DeleteBehavior.NoAction);
 
@@ -366,7 +369,7 @@ namespace Appointments.Infrastructure.Migrations
 
             modelBuilder.Entity("Appointments.Domain.Entities.Recurrence", b =>
                 {
-                    b.Navigation("Appointments");
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }

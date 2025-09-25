@@ -1,7 +1,7 @@
 ﻿namespace Common.Api
 {
+    using Common.Api.Filters;
     using Microsoft.AspNetCore.Mvc;
-    using Payments.Api.Filters;
 
     public static class DependencyInjection
     {

@@ -2,24 +2,29 @@
 {
     using Common.Domain;
     using Setups.Domain.Commands;
-    using System.Collections.Generic;
 
     public class Service : DomainEntity
     {
-        private Service(string name)
+        public string Name { get; private set; } = string.Empty;
+        public string UnitsName { get; private set; } = string.Empty;
+
+        private Service(string name, string unitsName)
         {
             Name = name;
+            UnitsName = unitsName;
         }
 
-        protected Service() { }
+        protected Service()
+        {
 
-        public string Name { get; private set; } = string.Empty;
-        public virtual ICollection<ServiceTier> ServiceTiers { get; private set; } = null!;
-        public virtual ICollection<ServiceProvision> ServiceProvisions { get; private set; } = null!;
+        }
+
+        public Guid ServiceTierId { get; private set; } = default;
+        public virtual ServiceTier Tier { get; private set; } = null!;
 
         internal static Service Create(CreateServiceDomainCommand model)
         {
-            return new Service(model.Name);
+            return new Service(model.Name, model.UnitsName);
         }
     }
 }

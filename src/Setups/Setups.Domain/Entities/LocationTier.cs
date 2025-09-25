@@ -1,21 +1,15 @@
 ﻿namespace Setups.Domain.Entities
 {
-    using Common.Domain;
     using Setups.Domain.Commands;
     using System.Collections.Generic;
 
-    public class LocationTier : DomainEntity
+    public class LocationTier : BaseTierEntity
     {
-        private LocationTier(string name)
-        {
-            Name = name;
-        }
+        private LocationTier(string name) : base(name) { }
 
-        protected LocationTier() { }
+        protected LocationTier() : base() { }
 
-        public string Name { get; private set; } = string.Empty;
-
-        public virtual ICollection<ServiceProvision> ServiceProvisions { get; private set; } = null!;
+        public virtual ICollection<Location> Locations { get; private set; } = null!;
 
         internal static LocationTier Create(CreateLocationTierDomainCommand model)
         {

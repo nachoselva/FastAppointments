@@ -25,9 +25,6 @@
         public Guid ServiceProvisionId { get; private set; } = default;
         public virtual ServiceProvision ServiceProvision { get; private set; } = null!;
 
-        public virtual ICollection<ServiceDiscount> Discounts { get; private set; } = null!;
-        public virtual ICollection<ServiceCommission> Commissions { get; private set; } = null!;
-
         internal static ServicePrice Create(CreateServicePriceDomainCommand model)
         {
             return new ServicePrice(model.PricePerUnit, model.MinimumUnits, model.MaximumUnits, model.EffectiveFrom)

@@ -1,15 +1,40 @@
-﻿#nullable disable
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
 
 namespace Setups.Infrastructure.Migrations
 {
-    using Microsoft.EntityFrameworkCore.Migrations;
-
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial_Migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "ClientTiers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
+                    VersionStartFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodStartColumn", true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientTiers", x => x.Id);
+                })
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "ClientTiersHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
             migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
@@ -40,14 +65,14 @@ namespace Setups.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
                     VersionStartFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:TemporalIsPeriodStartColumn", true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,25 +85,49 @@ namespace Setups.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.CreateTable(
-                name: "Services",
+                name: "ProviderTiers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
                     VersionStartFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:TemporalIsPeriodStartColumn", true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Services", x => x.Id);
+                    table.PrimaryKey("PK_ProviderTiers", x => x.Id);
                 })
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ServicesHistory")
+                .Annotation("SqlServer:TemporalHistoryTableName", "ProviderTiersHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
+            migrationBuilder.CreateTable(
+                name: "ServiceTiers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
+                    VersionStartFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodStartColumn", true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceTiers", x => x.Id);
+                })
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "ServiceTiersHistory")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", null)
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
@@ -103,6 +152,36 @@ namespace Setups.Infrastructure.Migrations
                 })
                 .Annotation("SqlServer:IsTemporal", true)
                 .Annotation("SqlServer:TemporalHistoryTableName", "UnitsHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
+            migrationBuilder.CreateTable(
+                name: "Clients",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExternalId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClientTierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
+                    VersionStartFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodStartColumn", true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Clients_ClientTiers_ClientTierId",
+                        column: x => x.ClientTierId,
+                        principalTable: "ClientTiers",
+                        principalColumn: "Id");
+                })
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "ClientsHistory")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", null)
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
@@ -139,12 +218,12 @@ namespace Setups.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.CreateTable(
-                name: "ServiceTiers",
+                name: "Providers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExternalId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProviderTierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
@@ -155,15 +234,94 @@ namespace Setups.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceTiers", x => x.Id);
+                    table.PrimaryKey("PK_Providers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ServiceTiers_Services_ServiceId",
-                        column: x => x.ServiceId,
-                        principalTable: "Services",
+                        name: "FK_Providers_ProviderTiers_ProviderTierId",
+                        column: x => x.ProviderTierId,
+                        principalTable: "ProviderTiers",
                         principalColumn: "Id");
                 })
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ServiceTiersHistory")
+                .Annotation("SqlServer:TemporalHistoryTableName", "ProvidersHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
+            migrationBuilder.CreateTable(
+                name: "ServiceProvisions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ServiceTierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LocationTierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ClientTierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProviderTierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
+                    VersionStartFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodStartColumn", true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceProvisions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ServiceProvisions_ClientTiers_ClientTierId",
+                        column: x => x.ClientTierId,
+                        principalTable: "ClientTiers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ServiceProvisions_LocationTiers_LocationTierId",
+                        column: x => x.LocationTierId,
+                        principalTable: "LocationTiers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ServiceProvisions_ProviderTiers_ProviderTierId",
+                        column: x => x.ProviderTierId,
+                        principalTable: "ProviderTiers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ServiceProvisions_ServiceTiers_ServiceTierId",
+                        column: x => x.ServiceTierId,
+                        principalTable: "ServiceTiers",
+                        principalColumn: "Id");
+                })
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "ServiceProvisionsHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
+            migrationBuilder.CreateTable(
+                name: "Services",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ServiceTierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
+                    VersionStartFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodStartColumn", true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Services", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Services_ServiceTiers_ServiceTierId",
+                        column: x => x.ServiceTierId,
+                        principalTable: "ServiceTiers",
+                        principalColumn: "Id");
+                })
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "ServicesHistory")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", null)
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
@@ -199,15 +357,13 @@ namespace Setups.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.CreateTable(
-                name: "ServiceProvisions",
+                name: "ServiceCommissions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StartOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ServiceTierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LocationTierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EffectiveFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CommissionPercentage = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    ServiceProvisionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
@@ -218,37 +374,28 @@ namespace Setups.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceProvisions", x => x.Id);
+                    table.PrimaryKey("PK_ServiceCommissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ServiceProvisions_LocationTiers_LocationTierId",
-                        column: x => x.LocationTierId,
-                        principalTable: "LocationTiers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ServiceProvisions_ServiceTiers_ServiceTierId",
-                        column: x => x.ServiceTierId,
-                        principalTable: "ServiceTiers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ServiceProvisions_Services_ServiceId",
-                        column: x => x.ServiceId,
-                        principalTable: "Services",
+                        name: "FK_ServiceCommissions_ServiceProvisions_ServiceProvisionId",
+                        column: x => x.ServiceProvisionId,
+                        principalTable: "ServiceProvisions",
                         principalColumn: "Id");
                 })
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ServiceProvisionsHistory")
+                .Annotation("SqlServer:TemporalHistoryTableName", "ServiceCommissionsHistory")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", null)
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.CreateTable(
-                name: "Addresses",
+                name: "ServiceDiscounts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StreetName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    StreetNumber = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EffectiveFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EffectiveTo = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DiscountPercentage = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    ServiceProvisionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
@@ -259,15 +406,15 @@ namespace Setups.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.Id);
+                    table.PrimaryKey("PK_ServiceDiscounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Addresses_Cities_CityId",
-                        column: x => x.CityId,
-                        principalTable: "Cities",
+                        name: "FK_ServiceDiscounts_ServiceProvisions_ServiceProvisionId",
+                        column: x => x.ServiceProvisionId,
+                        principalTable: "ServiceProvisions",
                         principalColumn: "Id");
                 })
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "AddressesHistory")
+                .Annotation("SqlServer:TemporalHistoryTableName", "ServiceDiscountsHistory")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", null)
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
@@ -306,6 +453,37 @@ namespace Setups.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StreetName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    StreetNumber = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
+                    VersionStartFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:TemporalIsPeriodStartColumn", true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Addresses_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id");
+                })
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "AddressesHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
+            migrationBuilder.CreateTable(
                 name: "Buildings",
                 columns: table => new
                 {
@@ -336,69 +514,6 @@ namespace Setups.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.CreateTable(
-                name: "ServiceCommissions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EffectiveFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CommissionPercentage = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    ServicePriceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
-                        .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
-                    VersionStartFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
-                        .Annotation("SqlServer:TemporalIsPeriodStartColumn", true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ServiceCommissions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ServiceCommissions_ServicePrices_ServicePriceId",
-                        column: x => x.ServicePriceId,
-                        principalTable: "ServicePrices",
-                        principalColumn: "Id");
-                })
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ServiceCommissionsHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
-                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
-                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
-
-            migrationBuilder.CreateTable(
-                name: "ServiceDiscounts",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EffectiveFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EffectiveTo = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DiscountPercentage = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    ServicePriceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
-                        .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
-                    VersionStartFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
-                        .Annotation("SqlServer:TemporalIsPeriodStartColumn", true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ServiceDiscounts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ServiceDiscounts_ServicePrices_ServicePriceId",
-                        column: x => x.ServicePriceId,
-                        principalTable: "ServicePrices",
-                        principalColumn: "Id");
-                })
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ServiceDiscountsHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
-                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
-                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
-
-            migrationBuilder.CreateTable(
                 name: "Locations",
                 columns: table => new
                 {
@@ -406,7 +521,8 @@ namespace Setups.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Floor = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     Room = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    BuildingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BuildingId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LocationTierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     VersionEndFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:TemporalIsPeriodEndColumn", true),
@@ -422,6 +538,11 @@ namespace Setups.Infrastructure.Migrations
                         name: "FK_Locations_Buildings_BuildingId",
                         column: x => x.BuildingId,
                         principalTable: "Buildings",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Locations_LocationTiers_LocationTierId",
+                        column: x => x.LocationTierId,
+                        principalTable: "LocationTiers",
                         principalColumn: "Id");
                 })
                 .Annotation("SqlServer:IsTemporal", true)
@@ -446,19 +567,34 @@ namespace Setups.Infrastructure.Migrations
                 column: "StateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clients_ClientTierId",
+                table: "Clients",
+                column: "ClientTierId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Locations_BuildingId",
                 table: "Locations",
                 column: "BuildingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceCommissions_ServicePriceId",
-                table: "ServiceCommissions",
-                column: "ServicePriceId");
+                name: "IX_Locations_LocationTierId",
+                table: "Locations",
+                column: "LocationTierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceDiscounts_ServicePriceId",
+                name: "IX_Providers_ProviderTierId",
+                table: "Providers",
+                column: "ProviderTierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceCommissions_ServiceProvisionId",
+                table: "ServiceCommissions",
+                column: "ServiceProvisionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceDiscounts_ServiceProvisionId",
                 table: "ServiceDiscounts",
-                column: "ServicePriceId");
+                column: "ServiceProvisionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ServicePrices_ServiceProvisionId",
@@ -466,14 +602,19 @@ namespace Setups.Infrastructure.Migrations
                 column: "ServiceProvisionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ServiceProvisions_ClientTierId",
+                table: "ServiceProvisions",
+                column: "ClientTierId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ServiceProvisions_LocationTierId",
                 table: "ServiceProvisions",
                 column: "LocationTierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceProvisions_ServiceId",
+                name: "IX_ServiceProvisions_ProviderTierId",
                 table: "ServiceProvisions",
-                column: "ServiceId");
+                column: "ProviderTierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ServiceProvisions_ServiceTierId",
@@ -481,9 +622,9 @@ namespace Setups.Infrastructure.Migrations
                 column: "ServiceTierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceTiers_ServiceId",
-                table: "ServiceTiers",
-                column: "ServiceId");
+                name: "IX_Services_ServiceTierId",
+                table: "Services",
+                column: "ServiceTierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_States_CountryId_Code",
@@ -496,9 +637,25 @@ namespace Setups.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Clients")
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "ClientsHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
+            migrationBuilder.DropTable(
                 name: "Locations")
                 .Annotation("SqlServer:IsTemporal", true)
                 .Annotation("SqlServer:TemporalHistoryTableName", "LocationsHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
+            migrationBuilder.DropTable(
+                name: "Providers")
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "ProvidersHistory")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", null)
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
@@ -520,6 +677,22 @@ namespace Setups.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.DropTable(
+                name: "ServicePrices")
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "ServicePricesHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
+            migrationBuilder.DropTable(
+                name: "Services")
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "ServicesHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
+            migrationBuilder.DropTable(
                 name: "Units")
                 .Annotation("SqlServer:IsTemporal", true)
                 .Annotation("SqlServer:TemporalHistoryTableName", "UnitsHistory")
@@ -536,9 +709,9 @@ namespace Setups.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.DropTable(
-                name: "ServicePrices")
+                name: "ServiceProvisions")
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ServicePricesHistory")
+                .Annotation("SqlServer:TemporalHistoryTableName", "ServiceProvisionsHistory")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", null)
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
@@ -552,17 +725,9 @@ namespace Setups.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.DropTable(
-                name: "ServiceProvisions")
+                name: "ClientTiers")
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ServiceProvisionsHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
-                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
-                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
-
-            migrationBuilder.DropTable(
-                name: "Cities")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "CitiesHistory")
+                .Annotation("SqlServer:TemporalHistoryTableName", "ClientTiersHistory")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", null)
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
@@ -576,6 +741,14 @@ namespace Setups.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.DropTable(
+                name: "ProviderTiers")
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "ProviderTiersHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
+
+            migrationBuilder.DropTable(
                 name: "ServiceTiers")
                 .Annotation("SqlServer:IsTemporal", true)
                 .Annotation("SqlServer:TemporalHistoryTableName", "ServiceTiersHistory")
@@ -584,17 +757,17 @@ namespace Setups.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.DropTable(
-                name: "States")
+                name: "Cities")
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "StatesHistory")
+                .Annotation("SqlServer:TemporalHistoryTableName", "CitiesHistory")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", null)
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");
 
             migrationBuilder.DropTable(
-                name: "Services")
+                name: "States")
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ServicesHistory")
+                .Annotation("SqlServer:TemporalHistoryTableName", "StatesHistory")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", null)
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "VersionEndFrom")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "VersionStartFrom");

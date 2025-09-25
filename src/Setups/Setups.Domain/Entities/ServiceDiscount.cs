@@ -19,14 +19,14 @@
         public DateTime EffectiveTo { get; private set; }
         public decimal DiscountPercentage { get; private set; }
 
-        public Guid ServicePriceId { get; private set; } = default;
-        public virtual ServicePrice ServicePrice { get; private set; } = null!;
+        public Guid ServiceProvisionId { get; private set; } = default;
+        public virtual ServiceProvision ServiceProvision { get; private set; } = null!;
 
         internal static ServiceDiscount Create(CreateServiceDiscountDomainCommand model)
         {
             return new ServiceDiscount(model.EffectiveFrom, model.EffectiveTo, model.DiscountPercentage)
             {
-                ServicePrice = null!
+
             };
         }
     }

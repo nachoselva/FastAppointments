@@ -7,5 +7,6 @@
     public class SetupsContext(DbContextOptions<SetupsContext> options) : DomainDbContext(options)
     {
         public DbSet<Country> Countries { get; set; }
+        public DbSet<ServiceProvision> ServiceProvisions { get; set; }
     }
 }

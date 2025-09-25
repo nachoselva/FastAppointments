@@ -15,7 +15,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpClients(configuration);
-        services.AddDatabase<PaymentsContext>();
+        services.AddDatabase<PaymentsContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         services.AddScoped<IBillRepository, BillRepository>();
         services.AddScoped<IPaymentEntityRepository, PaymentEntityRepository>();
         services.AddEventConnection(configuration);

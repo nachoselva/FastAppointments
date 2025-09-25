@@ -10,11 +10,6 @@
         {
             builder.ToTable("ServiceProvisions");
 
-            builder.HasOne(p => p.Service)
-                   .WithMany(s => s.ServiceProvisions)
-                   .HasForeignKey(p => p.ServiceId)
-                   .HasPrincipalKey(s => s.Id);
-
             builder.HasOne(p => p.ServiceTier)
                    .WithMany(t => t.ServiceProvisions)
                    .HasForeignKey(p => p.ServiceTierId)
@@ -24,6 +19,17 @@
                    .WithMany(l => l.ServiceProvisions)
                    .HasForeignKey(p => p.LocationTierId)
                    .HasPrincipalKey(l => l.Id);
+
+            builder.HasOne(p => p.ClientTier)
+                   .WithMany(s => s.ServiceProvisions)
+                   .HasForeignKey(p => p.ClientTierId)
+                   .HasPrincipalKey(s => s.Id);
+
+            builder.HasOne(p => p.ProviderTier)
+                   .WithMany(s => s.ServiceProvisions)
+                   .HasForeignKey(p => p.ProviderTierId)
+                   .HasPrincipalKey(s => s.Id);
+
         }
     }
 }

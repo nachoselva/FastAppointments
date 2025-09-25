@@ -14,7 +14,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDatabase<AppointmentsContext>();
+        services.AddDatabase<AppointmentsContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         services.AddScoped<IRecurrenceRepository, RecurrenceRepository>();
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddEventConnection(configuration);

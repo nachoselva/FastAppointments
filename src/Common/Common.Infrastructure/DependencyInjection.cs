@@ -13,10 +13,10 @@
 
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDatabase<T>(this IServiceCollection services)
+        public static IServiceCollection AddDatabase<T>(this IServiceCollection services, Action<DbContextOptionsBuilder>? dbOptions = null)
             where T : DbContext
         {
-            services.AddDbContext<T>();
+            services.AddDbContext<T>(dbOptions);
             services.AddScoped<IUnitOfWork, UnitOfWork<T>>();
             return services;
         }
@@ -59,6 +59,7 @@
             var apis = configuration.GetApisConfigByName();
             services.AddClient<AppointmentsClient>(apis, "appointments");
             services.AddClient<PaymentsClient>(apis, "payments");
+            services.AddClient<SetupsClient>(apis, "setups");
             return services;
         }
 

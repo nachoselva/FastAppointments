@@ -13,7 +13,13 @@
             builder.HasOne(l => l.Building)
                    .WithMany(b => b.Locations)
                    .HasForeignKey(l => l.BuildingId)
-                   .HasPrincipalKey(b => b.Id);
+                   .HasPrincipalKey(b => b.Id)
+                   .IsRequired(false);
+
+            builder.HasOne(l => l.Tier)
+                   .WithMany(lt => lt.Locations)
+                   .HasForeignKey(l => l.LocationTierId)
+                   .HasPrincipalKey(lt => lt.Id);
         }
     }
 }

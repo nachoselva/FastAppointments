@@ -5,6 +5,7 @@
         DateTime StartOn,
         string Description,
         int DurationInMinutes,
+        Guid ExternalLocationId,
         IEnumerable<GetExternalServiceResponse> Services,
         IEnumerable<GetAttendeResponse> Attendes);
 }

@@ -19,6 +19,7 @@ namespace Appointments.Api.Controllers
                 new CreateAppointmentConfigurationCommand(
                     request.Configuration.Description,
                     request.Configuration.DurationInMinutes,
+                    request.Configuration.ExternalLocationId,
                     request.Configuration.Services.Select(s => new AppointmentServiceCommand(s.ExternalServiceId, s.UnitsCount)),
                     request.Configuration.Attendes.Select(a => new AppointmentAttendeCommand(a.Category, a.Type, a.ExternalId, a.IsOptional))
                     ));

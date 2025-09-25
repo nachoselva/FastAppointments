@@ -19,8 +19,11 @@
         public string? Floor { get; private set; }
         public string? Room { get; private set; }
 
-        public Guid BuildingId { get; private set; } = default;
-        public virtual Building Building { get; private set; } = null!;
+        public Guid? BuildingId { get; private set; } = default;
+        public virtual Building? Building { get; private set; } = null!;
+
+        public Guid LocationTierId { get; private set; } = default;
+        public virtual LocationTier Tier { get; private set; } = null!;
 
         internal static Location Create(CreateLocationDomainCommand model)
         {

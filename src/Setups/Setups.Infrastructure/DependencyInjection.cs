@@ -4,15 +4,19 @@ using Common.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Setups.Application.Abstractions;
 using Setups.Infrastructure.Context;
+using Setups.Infrastructure.Implementations;
 
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDatabase<SetupsContext>();
+        services.AddDatabase<SetupsContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         MigrateDatabase(configuration);
+
+        services.AddScoped<IServiceProvisionRepository, ServiceProvisionRepository>();
 
         return services;
     }

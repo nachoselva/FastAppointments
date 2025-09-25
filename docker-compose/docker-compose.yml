@@ -18,8 +18,6 @@ services:
     build:
       context: ../
       dockerfile: src/Appointments/Appointments.Api/Dockerfile
-    ports:
-        - "5001:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
     depends_on:
