@@ -17,5 +17,12 @@
         {
             return queryDispatcher.DispatchAsync<GetEventQuery, GetEventResponse>(new GetEventQuery(id), cancellationToken);
         }
+
+        [HttpGet]
+        [Produces<IEnumerable<GetEventResponse>>]
+        public Task<Result<IEnumerable<GetEventResponse>>> GetEvents([FromQuery] DateTime? scheduledFrom, [FromQuery] DateTime? scheduledTo, CancellationToken cancellationToken)
+        {
+            return queryDispatcher.DispatchAsync<GetEventsQuery, IEnumerable<GetEventResponse>>(new GetEventsQuery(scheduledFrom, scheduledTo), cancellationToken);
+        }
     }
 }

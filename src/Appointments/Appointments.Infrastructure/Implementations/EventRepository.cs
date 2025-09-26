@@ -4,7 +4,9 @@
     using Appointments.Domain.Entities;
     using Appointments.Infrastructure.Context;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     internal class EventRepository(AppointmentsContext appointmentsContext) : IEventRepository
@@ -22,6 +24,24 @@
                 .Include(e => e.Configuration)
                 .ThenInclude(c => c!.Attendes)
                 .FirstOrDefaultAsync(e => e.Id == eventId);
+        }
+
+        public async Task<IEnumerable<Event>> GetAsync(DateTime? scheduledFrom, DateTime? scheduledTo)
+        {
+            var query = appointmentsContext.Events
+                .Include(e => e.Configuration)
+                .ThenInclude(c => c!.Services)
+                .Include(e => e.Configuration)
+                .ThenInclude(c => c!.Attendes)
+                .AsQueryable();
+
+            if(scheduledFrom.HasValue)
+                query = query.Where(e => e.StartOn >= scheduledFrom.Value); 
+
+            if(scheduledTo.HasValue)
+                query = query.Where(e => e.StartOn.AddMinutes((e.Configuration ?? e.Recurrence!.Configuration)!.DurationInMinutes) <= scheduledTo.Value);
+
+            return await query.ToListAsync();
         }
     }
 }
