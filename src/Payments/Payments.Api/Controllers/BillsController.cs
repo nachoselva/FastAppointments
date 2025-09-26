@@ -1,6 +1,7 @@
 namespace Payments.Api.Controllers
 {
     using Common.Application.CQRS;
+    using Common.Models.Setups;
     using FluentResults;
     using Microsoft.AspNetCore.Mvc;
     using Payments.Application.Implementations.Bill.Create;
@@ -11,6 +12,7 @@ namespace Payments.Api.Controllers
     public class BillsController(ICommandDispatcher commandDispatcher) : ControllerBase
     {
         [HttpPost]
+        [Produces<Guid>]
         public async Task<Result<Guid>> CreateBill([FromBody] CreateBillRequest request, CancellationToken cancellationToken)
         {
             var command = new CreateBillCommand(

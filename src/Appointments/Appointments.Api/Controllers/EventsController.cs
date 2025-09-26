@@ -12,6 +12,7 @@
     {
         [HttpGet]
         [Route("{id}")]
+        [Produces<GetEventResponse>]
         public Task<Result<GetEventResponse>> GetEvent(Guid id, CancellationToken cancellationToken)
         {
             return queryDispatcher.DispatchAsync<GetEventQuery, GetEventResponse>(new GetEventQuery(id), cancellationToken);

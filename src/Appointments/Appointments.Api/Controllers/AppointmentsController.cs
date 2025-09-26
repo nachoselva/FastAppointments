@@ -10,6 +10,7 @@ namespace Appointments.Api.Controllers
     public class AppointmentsController(ICommandDispatcher commandDispatcher) : ControllerBase
     {
         [HttpPost]
+        [Produces<Guid>]
         public Task<Result<Guid>> CreateAppointment([FromBody] CreateAppointmentRequest request, CancellationToken cancellationToken)
         {
             var command = new CreateAppointmentCommand(

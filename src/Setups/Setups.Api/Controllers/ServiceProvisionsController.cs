@@ -14,6 +14,7 @@ namespace Setups.Api.Controllers
 
         [HttpGet]
         [Route("search")]
+        [Produces<GetServiceProvisionResponse>]
         public async Task<Result<GetServiceProvisionResponse>> Search([FromQuery] SearchServiceProvisionRequest request, CancellationToken cancellationToken)
         {
             var query = new GetServiceProvisionQuery(
@@ -26,6 +27,7 @@ namespace Setups.Api.Controllers
 
         [HttpGet]
         [Route("search-many")]
+        [Produces<IEnumerable<GetServiceProvisionResponse>>]
         public async Task<Result<IEnumerable<GetServiceProvisionResponse?>>> SearchMany([FromQuery] SearchServiceProvisionsRequest request, CancellationToken cancellationToken)
         {
             var serviceCount = request.ServiceIds.Count();
