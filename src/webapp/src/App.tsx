@@ -1,101 +1,12 @@
-﻿import type { ReactNode } from 'react';
-import { useState } from 'react';
-import { FaCalendarAlt, FaCog, FaHome, FaMoneyBillWave, FaSignOutAlt, FaUser } from 'react-icons/fa';
-import { Link, Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
+﻿import { useState } from 'react';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Sidebar } from './components/sidebar';
 import './index.css';
-import AppointmentsPage from './pages/Appointments';
-import HomePage from './pages/Home';
-import PaymentsPage from './pages/Payments';
-import ProfilePage from './pages/Profile';
-import SetupsPage from './pages/Setups';
-
-interface MenuItem {
-    name: string;
-    path: string;
-    icon: ReactNode;
-}
-
-const menuItems: MenuItem[] = [
-    { name: 'Home', path: '/', icon: <FaHome /> },
-    { name: 'Appointments', path: '/appointments', icon: <FaCalendarAlt /> },
-    { name: 'Payments', path: '/payments', icon: <FaMoneyBillWave /> },
-    { name: 'Setups', path: '/setups', icon: <FaCog /> },
-];
-
-interface SidebarProps {
-    sidebarOpen: boolean;
-    setSidebarOpen: (open: boolean) => void;
-}
-
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-    const location = useLocation();
-
-    return (
-        <div
-            className={`
-        fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 
-        flex flex-col
-        transform transition-transform duration-300 ease-in-out
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        md:translate-x-0 md:static md:flex-shrink-0
-      `}
-        >
-            <div className="flex justify-end p-2 md:hidden">
-                <button
-                    onClick={() => setSidebarOpen(false)}
-                    className="p-2 rounded hover:bg-gray-200"
-                >
-                    ✕
-                </button>
-            </div>
-
-            <div className="p-4 flex-1">
-                <h2 className="text-xl font-bold mb-6">My App</h2>
-                <ul>
-                    {menuItems.map((item) => (
-                        <li key={item.name} className="mb-2">
-                            <Link
-                                to={item.path}
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${location.pathname === item.path ? 'bg-gray-200 font-semibold' : ''
-                                    }`}
-                                onClick={() => setSidebarOpen(false)}
-                            >
-                                {item.icon}
-                                {item.name}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-
-            <div className="p-4 border-t border-gray-200">
-                <ul>
-                    <li className="mb-2">
-                        <Link
-                            to="/profile"
-                            className={`flex items-center justify-between gap-2 p-2 rounded hover:bg-gray-200 ${location.pathname === '/profile' ? 'bg-gray-200 font-semibold' : ''
-                                }`}
-                            onClick={() => setSidebarOpen(false)}
-                        >
-                            <span>Profile</span>
-                            <FaUser />
-                        </Link>
-                    </li>
-                    <li>
-                        <button
-                            onClick={() => alert('Logout clicked')}
-                            className="flex w-full items-center justify-between gap-2 p-2 rounded hover:bg-gray-200 text-left"
-                        >
-                            <span>Logout</span>
-                            <FaSignOutAlt />
-                        </button>
-                    </li>
-                </ul>
-            </div>
-
-        </div>
-    );
-};
+import AppointmentsPage from './pages/appointments';
+import HomePage from './pages/home';
+import PaymentsPage from './pages/payments';
+import ProfilePage from './pages/profile';
+import SetupsPage from './pages/setups';
 
 const AppContent = () => (
     <div className="flex-1 flex flex-col">
