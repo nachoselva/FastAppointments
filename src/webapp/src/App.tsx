@@ -7,6 +7,13 @@ import HomePage from './pages/home';
 import PaymentsPage from './pages/payments';
 import ProfilePage from './pages/profile';
 import SetupsPage from './pages/setups';
+import CountriesPage from './pages/setups/countries';
+import StatesPage from './pages/setups/countries/states';
+import CitiesPage from './pages/setups/cities';
+import AddressesPage from './pages/setups/addresses';
+import BuildingsPage from './pages/setups/buildings';
+import LocationsPage from './pages/setups/locations';
+import ServiceProvisionsPage from './pages/setups/service-provisions';
 
 const AppContent = () => (
     <div className="flex-1 flex flex-col">
@@ -16,6 +23,13 @@ const AppContent = () => (
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/setups" element={<SetupsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/setups/countries" element={<CountriesPage />} />
+            <Route path="/setups/countries/:countryId/states" element={<StatesPage />} />
+            <Route path="/setups/countries/:countryId/states/:stateId/cities" element={<CitiesPage />} />
+            <Route path="/setups/addresses" element={<AddressesPage />} />
+            <Route path="/setups/buildings" element={<BuildingsPage />} />
+            <Route path="/setups/locations" element={<LocationsPage />} />
+            <Route path="/setups/service-provisions" element={<ServiceProvisionsPage />} />
         </Routes>
     </div>
 );

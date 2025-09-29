@@ -52,7 +52,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <h2 className="text-xl font-bold mb-6">My App</h2>
                 <ul>
                     {MenuItems.map((parentItem) => {
-                        const isParentActive = location.pathname === parentItem.path || parentItem.children?.some((child) => location.pathname === child.path);
+                        const isParentActive = parentItem.path === '/' ? location.pathname === '/' : location.pathname.startsWith(parentItem.path);
 
                         return (
                             <li key={parentItem.name} className="mb-1 relative group">
@@ -78,7 +78,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 {isParentActive && parentItem.children && (
                                     <ul className="ml-6 mt-1">
                                         {parentItem.children.map((childItem) => {
-                                            const isChildActive = location.pathname === childItem.path;
+                                            const isChildActive = location.pathname.startsWith(childItem.path);
                                             return (
                                                 <li key={parentItem.name} className="mb-1">
                                                     <SidebarLink
