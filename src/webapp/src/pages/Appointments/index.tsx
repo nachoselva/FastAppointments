@@ -1,8 +1,9 @@
-﻿import { format, getDay, parse, startOfWeek, endOfWeek, addDays, addWeeks, addMonths } from "date-fns";
+﻿import { addDays, addMonths, addWeeks, endOfWeek, format, getDay, parse, startOfWeek } from "date-fns";
 import { enUS } from "date-fns/locale/en-US";
 import { useState } from "react";
-import { Calendar, dateFnsLocalizer, type Event as RBCEvent, Views, type SlotInfo } from "react-big-calendar";
+import { Calendar, dateFnsLocalizer, Views, type Event as RBCEvent, type SlotInfo } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/card";
 
 const locales = {
     "en-US": enUS,
@@ -87,53 +88,58 @@ const AppointmentsPage: React.FC = () => {
     };
 
     return (
-        <div className="h-screen flex flex-col">
-            <header className="p-4 flex-shrink-0 bg-white shadow">
-                <h2 className="text-2xl font-bold">Appointments Page</h2>
-            </header>
+        <div className="p-4">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Appointments</CardTitle>
+                </CardHeader>
+                <CardContent>
 
-            <div className="flex gap-2 px-4 mt-4">
-                {viewValues.map(view => (
-                    <button
-                        key={view}
-                        onClick={() => setCurrentView(view)}
-                        className={`px-4 py-2 rounded-full transition-colors ${currentView === view ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                            }`}
-                    >
-                        {view.charAt(0).toUpperCase() + view.slice(1)}
-                    </button>
-                ))}
-            </div>
+                    <div className="flex gap-2 px-4 mt-4">
+                        {viewValues.map(view => (
+                            <button
+                                key={view}
+                                onClick={() => setCurrentView(view)}
+                                className={`px-4 py-2 rounded-full transition-colors ${currentView === view ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                                    }`}
+                            >
+                                {view.charAt(0).toUpperCase() + view.slice(1)}
+                            </button>
+                        ))}
+                    </div>
 
-            <div className="px-4 mt-2 text-center text-xl font-semibold text-gray-700">
-                {getViewDescription()}
-            </div>
+                    <div className="px-4 mt-2 text-center text-xl font-semibold text-gray-700">
+                        {getViewDescription()}
+                    </div>
 
-            <main className="flex-1 overflow-auto p-4">
-                <div className="h-full">
-                    <Calendar
-                        localizer={localizer}
-                        events={events}
-                        startAccessor="start"
-                        endAccessor="end"
-                        selectable
-                        onSelectSlot={handleSelectSlot}
-                        onSelectEvent={handleSelectEvent}
-                        view={currentView}
-                        date={currentDate}
-                        onView={view => setCurrentView(view as typeof viewValues[number])}
-                        onNavigate={date => setCurrentDate(date)}
-                        style={{ minHeight: "500px", height: "100%" }}
-                        toolbar={false}
-                    />
-                </div>
-            </main>
+                    <main className="flex-1 overflow-auto p-4">
+                        <div className="h-full">
+                            <Calendar
+                                localizer={localizer}
+                                events={events}
+                                startAccessor="start"
+                                endAccessor="end"
+                                selectable
+                                onSelectSlot={handleSelectSlot}
+                                onSelectEvent={handleSelectEvent}
+                                view={currentView}
+                                date={currentDate}
+                                onView={view => setCurrentView(view as typeof viewValues[number])}
+                                onNavigate={date => setCurrentDate(date)}
+                                style={{ minHeight: "500px", height: "100%" }}
+                                toolbar={false}
+                            />
+                        </div>
+                    </main>
 
-            <footer className="p-4 flex justify-center gap-4 bg-gray-50">
-                <button onClick={goToPrev} className="p-2 rounded bg-gray-200 hover:bg-gray-300">◀</button>
-                <button onClick={goToToday} className="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300">Today</button>
-                <button onClick={goToNext} className="p-2 rounded bg-gray-200 hover:bg-gray-300">▶</button>
-            </footer>
+                    <footer className="p-4 flex justify-center gap-4 bg-gray-50">
+                        <button onClick={goToPrev} className="p-2 rounded bg-gray-200 hover:bg-gray-300">◀</button>
+                        <button onClick={goToToday} className="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300">Today</button>
+                        <button onClick={goToNext} className="p-2 rounded bg-gray-200 hover:bg-gray-300">▶</button>
+                    </footer>
+
+                </CardContent>
+            </Card>
         </div>
     );
 };

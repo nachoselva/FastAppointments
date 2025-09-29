@@ -1,34 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/card";
+import { Button } from "../../../components/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/table";
 
 interface Address {
     id: number;
-    streetName: string;
-    streetNumber: string;
-    buildings: Building[];
-}
-interface Building {
-    id: number;
-    name: string;
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
 }
 
 const mockAddresses: Address[] = [
-    {
-        id: 1,
-        streetName: "Calle 1",
-        streetNumber: "100",
-        buildings: [
-            { id: 1, name: "Edificio A" },
-            { id: 2, name: "Edificio B" }
-        ]
-    },
-    {
-        id: 2,
-        streetName: "Av. Colon",
-        streetNumber: "300",
-        buildings: [
-            { id: 3, name: "Edificio C" }
-        ]
-    }
+    { id: 1, street: "123 Main St", city: "New York", state: "NY", zip: "10001" },
+    { id: 2, street: "456 Oak Ave", city: "Los Angeles", state: "CA", zip: "90001" },
 ];
 
 const AddressesPage: React.FC = () => {
@@ -38,50 +23,60 @@ const AddressesPage: React.FC = () => {
         setAddresses(mockAddresses);
     }, []);
 
-    const handleCreateAddress = () => {
+    const handleCreate = () => {
         alert("Create Address (mock)");
     };
-    const handleEditAddress = (id: number) => {
+
+    const handleEdit = (id: number) => {
         alert(`Edit Address ${id} (mock)`);
     };
-    const handleCreateBuilding = (addressId: number) => {
-        alert(`Create Building for Address ${addressId} (mock)`);
-    };
+
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Addresses & Buildings</h1>
-            <button className="mb-4 px-4 py-2 bg-blue-600 text-white rounded" onClick={handleCreateAddress}>
-                Create Address
-            </button>
-            <table className="min-w-full border mb-8">
-                <thead>
-                    <tr>
-                        <th className="border px-4 py-2">ID</th>
-                        <th className="border px-4 py-2">Street Name</th>
-                        <th className="border px-4 py-2">Street Number</th>
-                        <th className="border px-4 py-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {addresses.map((address) => (
-                        <React.Fragment key={address.id}>
-                            <tr>
-                                <td className="border px-4 py-2">{address.id}</td>
-                                <td className="border px-4 py-2">{address.streetName}</td>
-                                <td className="border px-4 py-2">{address.streetNumber}</td>
-                                <td className="border px-4 py-2">
-                                    <button className="px-2 py-1 bg-yellow-500 text-white rounded mr-2" onClick={() => handleEditAddress(address.id)}>
-                                        Edit
-                                    </button>
-                                    <button className="px-2 py-1 bg-green-500 text-white rounded" onClick={() => handleCreateBuilding(address.id)}>
-                                        Add Building
-                                    </button>
-                                </td>
-                            </tr>
-                        </React.Fragment>
-                    ))}
-                </tbody>
-            </table>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Addresses</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Button
+                        className="mb-4 bg-blue-600"
+                        onClick={handleCreate}
+                    >
+                        Create Address
+                    </Button>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>ID</TableHead>
+                                <TableHead>Street</TableHead>
+                                <TableHead>City</TableHead>
+                                <TableHead>State</TableHead>
+                                <TableHead>Zip</TableHead>
+                                <TableHead>Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {addresses.map((address) => (
+                                <TableRow key={address.id}>
+                                    <TableCell>{address.id}</TableCell>
+                                    <TableCell>{address.street}</TableCell>
+                                    <TableCell>{address.city}</TableCell>
+                                    <TableCell>{address.state}</TableCell>
+                                    <TableCell>{address.zip}</TableCell>
+                                    <TableCell>
+                                        <Button
+                                            className="bg-yellow-500"
+                                            onClick={() => handleEdit(address.id)}
+                                        >
+                                            Edit
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
         </div>
     );
 };

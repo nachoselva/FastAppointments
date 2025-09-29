@@ -1,4 +1,19 @@
 ﻿import React, { useState, useEffect, useMemo } from "react";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle
+} from "../../../components/card";
+import { Button } from "../../../components/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "../../../components/table";
 import { FilterBar, type Filter } from "../../../components/filter-bar";
 
 interface Location {
@@ -193,66 +208,87 @@ const LocationsPage: React.FC = () => {
         );
     }, [locations, filters]);
 
+    const handleCreate = () => {
+        alert("Create Location (mock)");
+    };
+
+    const handleEdit = (id: number) => {
+        alert(`Edit Location ${id} (mock)`);
+    };
+
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Locations</h1>
+        <div className="p-4">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Locations</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <FilterBar
+                        filterTypes={[
+                            { field: "building", label: "Building", type: "text" },
+                            { field: "address", label: "Address", type: "text" },
+                            { field: "city", label: "City", type: "text" },
+                            { field: "state", label: "State", type: "text" },
+                            { field: "country", label: "Country", type: "text" },
+                            { field: "id", label: "ID", type: "number" },
+                            { field: "createdAt", label: "Created At", type: "datetime" }
+                        ]}
+                        onApply={setFilters} // ← now handled internally
+                    />
 
-            <FilterBar
-                filterTypes={[
-                    { field: "building", label: "Building", type: "text" },
-                    { field: "address", label: "Address", type: "text" },
-                    { field: "city", label: "City", type: "text" },
-                    { field: "state", label: "State", type: "text" },
-                    { field: "country", label: "Country", type: "text" },
-                    { field: "id", label: "ID", type: "number" },
-                    { field: "createdAt", label: "Created At", type: "datetime" }
-                ]}
-                onApply={setFilters} // ← now handled internally
-            />
-
-            <button
-                className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
-                onClick={() => alert("Create Location (mock)")}
-            >
-                Create Location
-            </button>
-
-            <table className="min-w-full border border-gray-300 shadow-sm">
-                <thead className="bg-gray-100">
-                    <tr>
-                        <th className="border px-4 py-2 text-left">ID</th>
-                        <th className="border px-4 py-2 text-left">Establishment</th>
-                        <th className="border px-4 py-2 text-left">Address</th>
-                        <th className="border px-4 py-2 text-left">City</th>
-                        <th className="border px-4 py-2 text-left">Room</th>
-                        <th className="border px-4 py-2 text-left">Created At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredLocations.map((location) => (
-                        <tr key={location.id} className="hover:bg-gray-50">
-                            <td className="border px-4 py-2">{location.id}</td>
-                            <td className="border px-4 py-2">
-                                {location.building
-                                    ? `${location.name} (${location.building.name})`
-                                    : location.name}
-                            </td>
-                            <td className="border px-4 py-2">
-                                {location.building
-                                    ? `${location.building.address.streetName} ${location.building.address.streetNumber}`
-                                    : "N/A"}
-                            </td>
-                            <td className="border px-4 py-2">
-                                {location.building
-                                    ? `${location.building.address.city.name}, ${location.building.address.city.state.name}, ${location.building.address.city.state.country.name}`
-                                    : "N/A"}
-                            </td>
-                            <td className="border px-4 py-2">{`${location.floor ?? ""} ${location.room ?? ""}`}</td>
-                            <td className="border px-4 py-2">{location.createdAt ?? "N/A"}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                    <Button
+                        className="mb-4 bg-blue-600"
+                        onClick={handleCreate}
+                    >
+                        Create Location
+                    </Button>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>ID</TableHead>
+                                <TableHead>Establishment</TableHead>
+                                <TableHead>Address</TableHead>
+                                <TableHead>City</TableHead>
+                                <TableHead>Room</TableHead>
+                                <TableHead>Created At</TableHead>
+                                <TableHead>Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {filteredLocations.map((location) => (
+                                <TableRow key={location.id}>
+                                    <TableCell>{location.id}</TableCell>
+                                    <TableCell>
+                                        {location.building
+                                            ? `${location.name} (${location.building.name})`
+                                            : location.name}
+                                    </TableCell>
+                                    <TableCell>
+                                        {location.building
+                                            ? `${location.building.address.streetName} ${location.building.address.streetNumber}`
+                                            : "N/A"}
+                                    </TableCell>
+                                    <TableCell>
+                                        {location.building
+                                            ? `${location.building.address.city.name}`
+                                            : "N/A"}
+                                    </TableCell>
+                                    <TableCell>{`${location.floor ?? ""} ${location.room ?? ""}`}</TableCell>
+                                    <TableCell>{location.createdAt ?? "N/A"}</TableCell>
+                                    <TableCell>
+                                        <Button
+                                            className="bg-yellow-500"
+                                            onClick={() => handleEdit(location.id)}
+                                        >
+                                            Edit
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
         </div>
     );
 };

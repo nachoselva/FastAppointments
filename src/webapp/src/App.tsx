@@ -11,7 +11,6 @@ import CountriesPage from './pages/setups/countries';
 import StatesPage from './pages/setups/countries/states';
 import CitiesPage from './pages/setups/cities';
 import AddressesPage from './pages/setups/addresses';
-import BuildingsPage from './pages/setups/buildings';
 import LocationsPage from './pages/setups/locations';
 import ServiceProvisionsPage from './pages/setups/service-provisions';
 
@@ -27,7 +26,6 @@ const AppContent = () => (
             <Route path="/setups/countries/:countryId/states" element={<StatesPage />} />
             <Route path="/setups/countries/:countryId/states/:stateId/cities" element={<CitiesPage />} />
             <Route path="/setups/addresses" element={<AddressesPage />} />
-            <Route path="/setups/buildings" element={<BuildingsPage />} />
             <Route path="/setups/locations" element={<LocationsPage />} />
             <Route path="/setups/service-provisions" element={<ServiceProvisionsPage />} />
         </Routes>

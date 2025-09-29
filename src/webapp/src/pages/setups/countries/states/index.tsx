@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../../components/table";
 
 interface State {
     id: number;
@@ -14,17 +16,18 @@ const mockStates: State[] = [
         id: 1,
         name: "Buenos Aires",
         code: "BA",
-        cities : 10,
-        enabled : true
+        cities: 10,
+        enabled: true
     },
     {
         id: 2,
         name: "Cordoba",
         code: "CB",
         cities: 10,
-        enabled : false
+        enabled: false
     }
 ];
+
 
 const StatesPage: React.FC = () => {
     const [states, setStates] = useState<State[]>([]);
@@ -43,43 +46,47 @@ const StatesPage: React.FC = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">States</h1>
-            <table className="min-w-full border mb-8">
-                <thead>
-                    <tr>
-                        <th className="border px-4 py-2">ID</th>
-                        <th className="border px-4 py-2">Name</th>
-                        <th className="border px-4 py-2">Code</th>
-                        <th className="border px-4 py-2">Cities</th>
-                        <th className="border px-4 py-2">Enabled</th>
-                        <th className="border px-4 py-2"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {states.map((state) => (
-                        <React.Fragment key={state.id}>
-                            <tr>
-                                <td className="border px-4 py-2">{state.id}</td>
-                                <td className="border px-4 py-2">{state.name}</td>
-                                <td className="border px-4 py-2">{state.code}</td>
-                                <td className="border px-4 py-2">{state.cities}</td>
-                                <td className="border px-4 py-2 text-center">
-                                    <input
-                                        type="checkbox"
-                                        checked={state.enabled}
-                                        onChange={() => toggleEnabled(state.id)}
-                                    />
-                                </td>
-                                <td className="border px-4 py-2">
-                                    <Link to={`${state.id}/cities`} className="px-2 py-1 bg-blue-500 text-white rounded mr-2">
-                                        Cities
-                                    </Link>
-                                </td>
-                            </tr>
-                        </React.Fragment>
-                    ))}
-                </tbody>
-            </table>
+            <Card>
+                <CardHeader>
+                    <CardTitle>States</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>ID</TableHead>
+                                <TableHead>Name</TableHead>
+                                <TableHead>Code</TableHead>
+                                <TableHead>Cities</TableHead>
+                                <TableHead>Enabled</TableHead>
+                                <TableHead> Cities </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {states.map((state) => (
+                                <TableRow key={state.id}>
+                                    <TableCell>{state.id}</TableCell>
+                                    <TableCell>{state.name}</TableCell>
+                                    <TableCell>{state.code}</TableCell>
+                                    <TableCell>{state.cities}</TableCell>
+                                    <TableCell>
+                                        <input
+                                            type="checkbox"
+                                            checked={state.enabled}
+                                            onChange={() => toggleEnabled(state.id)}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Link to={`${state.id}/cities`} className="px-2 py-1 bg-blue-500 text-white rounded mr-2">
+                                            Cities
+                                        </Link>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
         </div>
     );
 };
